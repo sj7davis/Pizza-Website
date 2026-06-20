@@ -4,6 +4,7 @@ import { Hono } from 'hono'
 import { trpcServer } from '@hono/trpc-server'
 import { appRouter } from './trpc/routers/app'
 import { createContext } from './trpc/context'
+import { handleUpload } from './upload'
 
 export const app = new Hono()
 
@@ -17,6 +18,8 @@ app.use(
       createContext(c) as unknown as Promise<Record<string, unknown>>,
   }),
 )
+
+app.post('/api/admin/upload', (c) => handleUpload(c))
 
 // Serve uploaded images and the built client (production). Skipped under tests.
 if (!process.env.VITEST) {
