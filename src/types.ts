@@ -4,6 +4,11 @@ export interface MenuItem {
   price: string
 }
 
+export interface SocialLink {
+  label: string
+  href: string
+}
+
 export interface SiteContent {
   brandName: string
   tagline: string
@@ -12,5 +17,5 @@ export interface SiteContent {
   story: { heading: string; body: string }
   menu: MenuItem[]
   delivery: { area: string; hours: string }
-  socials: { label: string; href: string }[]
+  socials: SocialLink[]
 }

@@ -27,9 +27,9 @@ export function Hero({ brandName, tagline, uberEatsUrl }: HeroProps) {
       <div className="hero__grain" aria-hidden="true" />
       <div className="container hero__inner">
         <div className="label hero__eyebrow">Sourdough Pizza · Delivered</div>
-        <motion.div className="hero__logo" {...step(1)}>
+        <motion.h1 className="hero__logo" {...step(1)}>
           <Logo text={brandName} />
-        </motion.div>
+        </motion.h1>
         <motion.p className="hero__tagline" {...step(2)}>{tagline}</motion.p>
         <motion.div className="hero__line" {...step(3)} aria-hidden="true" />
         <motion.div {...step(4)}>

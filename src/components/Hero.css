@@ -11,6 +11,7 @@
 }
 .hero__inner { position: relative; }
 .hero__eyebrow { margin-bottom: 28px; }
+.hero__logo { margin: 0; font-weight: 400; }
 .hero__logo .logo { font-size: clamp(56px, 12vw, 132px); }
 .hero__tagline {
   font-family: var(--font-italic);

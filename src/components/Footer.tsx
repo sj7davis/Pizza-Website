@@ -1,11 +1,12 @@
 import { Logo } from './Logo'
 import { OrderButton } from './OrderButton'
+import type { SocialLink } from '../types'
 import './Footer.css'
 
 interface FooterProps {
   brandName: string
   uberEatsUrl: string
-  socials: { label: string; href: string }[]
+  socials: SocialLink[]
 }
 
 export function Footer({ brandName, uberEatsUrl, socials }: FooterProps) {
