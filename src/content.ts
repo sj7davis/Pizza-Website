@@ -13,8 +13,8 @@ export const content: SiteContent = {
       'We took that loaf and built a pizza around it: a 48-hour cold-fermented base, blistered in a screaming-hot oven and sent straight to your door. The bakery that perfected the bread now fires the pizza.',
     ],
     pullquote: 'Same sourdough. Same hands. Now with fire.',
-    // TODO: confirm the real founding year and suburb.
-    established: 'Backhaus — est. [YEAR], [SUBURB]',
+    // TODO: add the real founding year / suburb when confirmed.
+    established: 'Backhaus — a Melbourne sourdough bakery',
   },
   // TODO: replace placeholder pizzas + copy with the real menu; add `image` paths when photos exist.
   menu: [
