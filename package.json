@@ -9,12 +9,29 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "dev:server": "tsx watch server/index.ts",
+    "start": "prisma migrate deploy && tsx server/index.ts",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:deploy": "prisma migrate deploy",
+    "db:seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
+    "@hono/node-server": "^2.0.5",
+    "@hono/trpc-server": "^0.4.2",
+    "@prisma/client": "^7.8.0",
+    "@tanstack/react-query": "^5.101.0",
+    "@trpc/client": "^11.18.0",
+    "@trpc/react-query": "^11.18.0",
+    "@trpc/server": "^11.18.0",
+    "hono": "^4.12.26",
     "motion": "^12.40.0",
     "react": "^19.2.6",
-    "react-dom": "^19.2.6"
+    "react-dom": "^19.2.6",
+    "react-router-dom": "^7.18.0",
+    "superjson": "^2.2.6",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
@@ -29,6 +46,8 @@
     "eslint-plugin-react-refresh": "^0.5.2",
     "globals": "^17.6.0",
     "jsdom": "^29.1.1",
+    "prisma": "^7.8.0",
+    "tsx": "^4.22.4",
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.59.2",
     "vite": "^8.0.12",

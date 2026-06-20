@@ -1,8 +1,12 @@
 import '@testing-library/jest-dom'
 import { vi } from 'vitest'
 
+// jsdom-only polyfills below are skipped when running under the node test
+// environment (e.g. server/__tests__/* via `@vitest-environment node`),
+// where `window` does not exist.
+
 // jsdom lacks matchMedia; default to "no reduced motion".
-if (!window.matchMedia) {
+if (typeof window !== 'undefined' && !window.matchMedia) {
   window.matchMedia = vi.fn().mockImplementation((query: string) => ({
     matches: false,
     media: query,
@@ -16,7 +20,7 @@ if (!window.matchMedia) {
 }
 
 // jsdom lacks IntersectionObserver (Motion whileInView needs it).
-if (!window.IntersectionObserver) {
+if (typeof window !== 'undefined' && !window.IntersectionObserver) {
   // @ts-expect-error minimal stub
   window.IntersectionObserver = class {
     observe() {}
