@@ -1,4 +1,4 @@
-import type { SiteContent, MenuItem, SocialLink } from '../shared/contract'
+import type { SiteContent, MenuItem } from '../shared/contract'
 import { paragraphsSchema, socialsSchema } from './validation'
 
 export interface MenuItemRow {

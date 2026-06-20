@@ -2,8 +2,15 @@ import { z } from 'zod'
 import { TRPCError } from '@trpc/server'
 import { setCookie, deleteCookie, getCookie } from 'hono/cookie'
 import { router, publicProcedure } from '../trpc'
-import { verifyPassword } from '../../auth/password'
+import { hashPassword, verifyPassword } from '../../auth/password'
 import { createSession, deleteSession, SESSION_COOKIE, SESSION_TTL_MS } from '../../auth/session'
+
+// A dummy hash verified when the email is unknown, so login takes comparable
+// time whether or not the account exists (prevents email enumeration via timing).
+let dummyHashPromise: Promise<string> | null = null
+function getDummyHash(): Promise<string> {
+  return (dummyHashPromise ??= hashPassword('pbv-unused-dummy-password'))
+}
 
 export const authRouter = router({
   me: publicProcedure.query(({ ctx }) => ctx.user),
@@ -17,7 +24,10 @@ export const authRouter = router({
     )
     .mutation(async ({ ctx, input }) => {
       const user = await ctx.db.adminUser.findUnique({ where: { email: input.email } })
-      if (!user || !(await verifyPassword(user.passwordHash, input.password))) {
+      // Always run a verify (even when the user is missing) to keep timing uniform.
+      const hash = user?.passwordHash ?? (await getDummyHash())
+      const passwordOk = await verifyPassword(hash, input.password)
+      if (!user || !passwordOk) {
         throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Invalid email or password' })
       }
       const token = await createSession(ctx.db, user.id)
