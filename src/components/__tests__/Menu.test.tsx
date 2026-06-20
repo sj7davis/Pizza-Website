@@ -4,15 +4,15 @@ import { Menu } from '../Menu'
 import type { MenuItem } from '../../types'
 
 const items: MenuItem[] = [
-  { name: 'Margherita', tagline: 'classic', description: 'classic', price: '$22' },
-  { name: 'Nduja', tagline: 'spicy', description: 'spicy', price: '$26' },
+  { name: 'Margherita', tagline: 'the original', description: 'San Marzano, fior di latte, basil.', price: '$22' },
+  { name: 'Nduja', tagline: 'spicy', description: 'Calabrian nduja and hot honey.', price: '$26' },
 ]
 
 describe('Menu', () => {
-  it('renders every menu item with its price', () => {
+  it('renders every menu item as a card with its name and price', () => {
     render(<Menu items={items} />)
-    expect(screen.getByText('Margherita')).toBeInTheDocument()
-    expect(screen.getByText('Nduja')).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Margherita' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Nduja' })).toBeInTheDocument()
     expect(screen.getByText('$26')).toBeInTheDocument()
   })
 })

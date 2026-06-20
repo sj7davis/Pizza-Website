@@ -1,16 +1,7 @@
 .menu { padding: clamp(72px, 12vh, 140px) 0; }
 .menu .label { margin-bottom: 32px; }
-.menu__list { list-style: none; margin: 0; padding: 0; }
-.menu__row { border-top: 1px solid var(--hairline); }
-.menu__row:last-child { border-bottom: 1px solid var(--hairline); }
-.menu__row-inner {
+.menu__grid {
   display: grid;
-  grid-template-columns: 1fr auto;
-  grid-template-areas: 'name price' 'desc price';
-  gap: 2px 24px;
-  align-items: baseline;
-  padding: 24px 0;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+  gap: 28px;
 }
-.menu__name { grid-area: name; font-family: var(--font-display); font-size: clamp(24px, 3.4vw, 38px); margin: 0; }
-.menu__desc { grid-area: desc; font-family: var(--font-italic); font-style: italic; color: var(--ink-soft); margin: 0; }
-.menu__price { grid-area: price; font-family: var(--font-mono); font-size: 16px; color: var(--gold); }
