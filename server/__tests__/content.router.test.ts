@@ -24,7 +24,7 @@ function makeDb() {
 describe('content.get', () => {
   it('returns mapped site content and queries only available items in order', async () => {
     const db = makeDb()
-    const caller = appRouter.createCaller({ db: db as never })
+    const caller = appRouter.createCaller({ db: db as never, c: {} as never, user: null })
     const res = await caller.content.get()
     expect(res.siteContent.brandName).toBe('PBV')
     expect(res.siteContent.menu).toHaveLength(1)
@@ -37,7 +37,7 @@ describe('content.get', () => {
   it('throws if site content is not seeded', async () => {
     const db = makeDb()
     db.siteContent.findUnique.mockResolvedValueOnce(null)
-    const caller = appRouter.createCaller({ db: db as never })
+    const caller = appRouter.createCaller({ db: db as never, c: {} as never, user: null })
     await expect(caller.content.get()).rejects.toThrow(/not seeded/)
   })
 })

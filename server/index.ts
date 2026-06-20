@@ -13,7 +13,8 @@ app.use(
   '/api/trpc/*',
   trpcServer({
     router: appRouter,
-    createContext: () => createContext() as unknown as Record<string, unknown>,
+    createContext: (_opts, c) =>
+      createContext(c) as unknown as Promise<Record<string, unknown>>,
   }),
 )
 
