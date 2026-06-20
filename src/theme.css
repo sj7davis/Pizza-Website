@@ -1,0 +1,48 @@
+:root {
+  --paper: #f6f5f1;
+  --ink: #15140f;
+  --ink-soft: #3c382f;
+  --muted: #9b9485;
+  --hairline: #e0ddd3;
+  --gold: #b8923f;
+  --gold-foil: linear-gradient(110deg,#fbe6a2 0%,#bf9b3e 38%,#fff2c4 52%,#c9a14a 66%,#a8842f 100%);
+
+  --font-display: 'Libre Caslon Display', Georgia, serif;
+  --font-italic: 'Fraunces', Georgia, serif;
+  --font-ui: 'Archivo', system-ui, sans-serif;
+  --font-mono: 'Space Mono', ui-monospace, monospace;
+
+  --maxw: 1100px;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-ui);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Foil text helper */
+.foil {
+  background: var(--gold-foil);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: foil-shine 5s linear infinite;
+}
+@keyframes foil-shine { to { background-position: 200% center; } }
+
+.container { max-width: var(--maxw); margin: 0 auto; padding: 0 24px; }
+.label {
+  font-family: var(--font-ui);
+  font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .foil { animation: none; }
+}
