@@ -1,0 +1,13 @@
+.logo {
+  font-family: var(--font-display);
+  letter-spacing: 0.18em;
+  color: var(--ink);
+  display: inline-flex;
+  align-items: baseline;
+  line-height: 1;
+}
+.logo__ch { position: relative; }
+.logo__dot {
+  margin: 0 0.18em;
+  font-size: 0.7em;
+}

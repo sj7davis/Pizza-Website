@@ -1,0 +1,23 @@
+.story { padding: clamp(72px, 14vh, 160px) 0; background: var(--ink); color: var(--paper); }
+.story__inner { max-width: 760px; }
+.story__eyebrow { color: var(--gold); margin-bottom: 18px; }
+.story__heading { font-family: var(--font-display); font-size: clamp(32px, 5vw, 60px); margin: 0 0 24px; }
+.story__body { font-size: clamp(16px, 2vw, 19px); line-height: 1.7; color: #d8d3c8; margin: 0 0 18px; }
+.story__quote {
+  font-family: var(--font-italic);
+  font-style: italic;
+  font-size: clamp(22px, 3vw, 32px);
+  line-height: 1.4;
+  color: var(--paper);
+  margin: 32px 0;
+  padding-left: 22px;
+  border-left: 2px solid transparent;
+  border-image: var(--gold-foil) 1;
+}
+.story__established {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 1px;
+  color: var(--muted);
+  margin: 0;
+}

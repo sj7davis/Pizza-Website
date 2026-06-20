@@ -1,0 +1,7 @@
+.menu { padding: clamp(72px, 12vh, 140px) 0; }
+.menu .label { margin-bottom: 32px; }
+.menu__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+  gap: 28px;
+}

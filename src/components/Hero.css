@@ -1,0 +1,50 @@
+.hero {
+  position: relative;
+  /* Slightly under a full viewport so the next section peeks — signals "scrollable". */
+  min-height: 90svh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+.hero__scroll {
+  position: absolute;
+  left: 50%;
+  bottom: 26px;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  text-decoration: none;
+  color: var(--muted);
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+.hero__scroll:hover { color: var(--ink); transform: translateX(-50%) translateY(2px); }
+.hero__scroll-label {
+  font-family: var(--font-ui);
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+.hero__scroll-arrow {
+  font-size: 17px;
+  line-height: 1;
+  color: var(--gold);
+}
+.hero__grain {
+  position: absolute; inset: 0; pointer-events: none; opacity: 0.5;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+}
+.hero__inner { position: relative; }
+.hero__eyebrow { margin-bottom: 28px; }
+.hero__logo { margin: 0; font-weight: 400; }
+.hero__logo .logo { font-size: clamp(56px, 12vw, 132px); }
+.hero__tagline {
+  font-family: var(--font-italic);
+  font-style: italic;
+  font-size: clamp(18px, 2.4vw, 26px);
+  color: var(--ink-soft);
+  margin: 18px 0 0;
+  max-width: 22ch;
+}
+.hero__line { width: 56px; height: 2px; background: var(--gold-foil); margin: 28px 0; }

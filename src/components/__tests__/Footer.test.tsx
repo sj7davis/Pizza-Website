@@ -1,0 +1,17 @@
+import { describe, it, expect } from 'vitest'
+import { render, screen } from '@testing-library/react'
+import { Footer } from '../Footer'
+
+describe('Footer', () => {
+  it('repeats the Uber Eats CTA and lists socials', () => {
+    render(
+      <Footer
+        brandName="PBV"
+        uberEatsUrl="#order"
+        socials={[{ label: 'Instagram', href: '#ig' }]}
+      />
+    )
+    expect(screen.getByRole('link', { name: /order on uber eats/i })).toHaveAttribute('href', '#order')
+    expect(screen.getByRole('link', { name: 'Instagram' })).toHaveAttribute('href', '#ig')
+  })
+})

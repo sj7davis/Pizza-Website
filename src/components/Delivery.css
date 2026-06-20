@@ -1,0 +1,5 @@
+.delivery { padding: clamp(72px, 12vh, 140px) 0; }
+.delivery__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+@media (max-width: 640px) { .delivery__grid { grid-template-columns: 1fr; } }
+.delivery__col .label { margin-bottom: 12px; }
+.delivery__value { font-family: var(--font-display); font-size: clamp(22px, 3vw, 34px); margin: 0; }
