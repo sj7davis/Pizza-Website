@@ -6,6 +6,7 @@ import superjson from 'superjson'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { trpc } from './lib/trpc'
 import App from './App'
+import { AdminApp } from './admin/AdminApp'
 import './theme.css'
 
 const queryClient = new QueryClient()
@@ -19,6 +20,7 @@ createRoot(document.getElementById('root')!).render(
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
           <Routes>
+            <Route path="/admin/*" element={<AdminApp />} />
             <Route path="/*" element={<App />} />
           </Routes>
         </BrowserRouter>
