@@ -5,17 +5,15 @@ export function Login({ onSuccess }: { onSuccess: () => void }) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
-  const login = trpc.auth.login.useMutation()
+  const login = trpc.auth.login.useMutation({
+    onSuccess: () => onSuccess(),
+    onError: () => setError('Invalid email or password'),
+  })
 
-  async function submit(e: FormEvent) {
+  function submit(e: FormEvent) {
     e.preventDefault()
     setError('')
-    try {
-      await login.mutateAsync({ email, password })
-      onSuccess()
-    } catch {
-      setError('Invalid email or password')
-    }
+    login.mutate({ email, password })
   }
 
   return (
