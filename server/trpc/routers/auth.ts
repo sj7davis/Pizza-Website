@@ -33,7 +33,7 @@ export const authRouter = router({
       const token = await createSession(ctx.db, user.id)
       setCookie(ctx.c, SESSION_COOKIE, token, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
+        secure: process.env.COOKIE_SECURE === 'true',
         sameSite: 'Lax',
         path: '/',
         maxAge: Math.floor(SESSION_TTL_MS / 1000),
