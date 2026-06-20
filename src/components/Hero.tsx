@@ -36,6 +36,22 @@ export function Hero({ brandName, tagline, uberEatsUrl }: HeroProps) {
           <OrderButton href={uberEatsUrl} />
         </motion.div>
       </div>
+
+      <a className="hero__scroll" href="#menu" aria-label="Scroll to the menu">
+        <span className="hero__scroll-label">Scroll</span>
+        {reduce ? (
+          <span className="hero__scroll-arrow" aria-hidden="true">↓</span>
+        ) : (
+          <motion.span
+            className="hero__scroll-arrow"
+            aria-hidden="true"
+            animate={{ y: [0, 8, 0] }}
+            transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
+          >
+            ↓
+          </motion.span>
+        )}
+      </a>
     </header>
   )
 }

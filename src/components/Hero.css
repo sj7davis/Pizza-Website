@@ -1,9 +1,35 @@
 .hero {
   position: relative;
-  min-height: 100svh;
+  /* Slightly under a full viewport so the next section peeks — signals "scrollable". */
+  min-height: 90svh;
   display: flex;
   align-items: center;
   overflow: hidden;
+}
+.hero__scroll {
+  position: absolute;
+  left: 50%;
+  bottom: 26px;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  text-decoration: none;
+  color: var(--muted);
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+.hero__scroll:hover { color: var(--ink); transform: translateX(-50%) translateY(2px); }
+.hero__scroll-label {
+  font-family: var(--font-ui);
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+.hero__scroll-arrow {
+  font-size: 17px;
+  line-height: 1;
+  color: var(--gold);
 }
 .hero__grain {
   position: absolute; inset: 0; pointer-events: none; opacity: 0.5;
