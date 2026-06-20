@@ -77,7 +77,7 @@ export function BrandEditor() {
   const [saved, setSaved] = useState(false)
 
   if (get.isLoading) return <p>Loading…</p>
-  const data = form ?? (get.data ? rowToForm(get.data as SiteRow) : null)
+  const data = form ?? (get.data ? rowToForm(get.data as unknown as SiteRow) : null)
   if (!data) return <p>No site content yet — seed the database first.</p>
 
   function set<K extends keyof BrandForm>(k: K, val: BrandForm[K]) {
