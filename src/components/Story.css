@@ -1,0 +1,4 @@
+.story { padding: clamp(72px, 14vh, 160px) 0; background: var(--ink); color: var(--paper); }
+.story__inner { max-width: 760px; }
+.story__heading { font-family: var(--font-display); font-size: clamp(32px, 5vw, 60px); margin: 0 0 24px; }
+.story__body { font-family: var(--font-italic); font-style: italic; font-size: clamp(18px, 2.2vw, 24px); line-height: 1.6; color: #d8d3c8; margin: 0; }
