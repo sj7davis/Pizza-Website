@@ -4,8 +4,8 @@ import { Menu } from '../Menu'
 import type { MenuItem } from '../../types'
 
 const items: MenuItem[] = [
-  { name: 'Margherita', description: 'classic', price: '$22' },
-  { name: 'Nduja', description: 'spicy', price: '$26' },
+  { name: 'Margherita', tagline: 'classic', description: 'classic', price: '$22' },
+  { name: 'Nduja', tagline: 'spicy', description: 'spicy', price: '$26' },
 ]
 
 describe('Menu', () => {

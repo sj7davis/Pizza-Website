@@ -14,7 +14,7 @@ export default function App() {
         uberEatsUrl={content.uberEatsUrl}
       />
       <Menu items={content.menu} />
-      <Story heading={content.story.heading} body={content.story.body} />
+      <Story story={content.story} />
       <Delivery area={content.delivery.area} hours={content.delivery.hours} />
       <Footer
         brandName={content.brandName}
