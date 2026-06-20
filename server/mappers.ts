@@ -1,4 +1,5 @@
-import type { SiteContent, MenuItem, SocialLink } from '../shared/contract'
+import type { SiteContent, MenuItem } from '../shared/contract'
+import { paragraphsSchema, socialsSchema } from './validation'
 
 export interface MenuItemRow {
   name: string
@@ -41,12 +42,12 @@ export function rowsToSiteContent(site: SiteContentRow, menuRows: MenuItemRow[])
     story: {
       eyebrow: site.storyEyebrow,
       heading: site.storyHeading,
-      paragraphs: site.storyParagraphs as string[],
+      paragraphs: paragraphsSchema.parse(site.storyParagraphs),
       pullquote: site.storyPullquote,
       established: site.storyEstablished,
     },
     menu: menuRows.map(rowToMenuItem),
     delivery: { area: site.deliveryArea, hours: site.deliveryHours },
-    socials: site.socials as SocialLink[],
+    socials: socialsSchema.parse(site.socials),
   }
 }
