@@ -1,7 +1,7 @@
 import type { SiteContent } from './types'
 
 export const content: SiteContent = {
-  brandName: 'PBV',
+  brandName: 'PBB',
   tagline: 'Wild-yeast dough, 48 hours in the making.',
   // TODO: replace with the live Uber Eats store URL when available.
   uberEatsUrl: 'https://www.ubereats.com/',
@@ -9,7 +9,7 @@ export const content: SiteContent = {
     eyebrow: 'Our story',
     heading: 'From the Backhaus bench',
     paragraphs: [
-      'PBV comes from the people behind Backhaus — the bakery that spent years perfecting a wild-yeast sourdough. The same starter, the same patience, the same hands.',
+      'PBB — Pizza by Backhaus — comes from the people behind the Backhaus bakery, where a wild-yeast sourdough was perfected over years. The same starter, the same patience, the same hands.',
       'We took that loaf and built a pizza around it: a 48-hour cold-fermented base, blistered in a screaming-hot oven and sent straight to your door. The bakery that perfected the bread now fires the pizza.',
     ],
     pullquote: 'Same sourdough. Same hands. Now with fire.',

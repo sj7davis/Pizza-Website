@@ -3,7 +3,7 @@ import { content } from '../content'
 
 describe('content', () => {
   it('exposes core brand fields', () => {
-    expect(content.brandName).toBe('PBV')
+    expect(content.brandName).toBe('PBB')
     expect(content.delivery.area).toMatch(/Airport West/i)
     expect(content.delivery.hours).toMatch(/5.*9/)
   })
