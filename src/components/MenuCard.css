@@ -1,0 +1,30 @@
+.menu-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--paper);
+  border: 1px solid var(--hairline);
+  overflow: hidden;
+}
+.menu-card__media {
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--paper);
+}
+.menu-card__img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.menu-card__body { padding: 18px 20px 22px; }
+.menu-card__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+}
+.menu-card__name { font-family: var(--font-display); font-size: clamp(20px, 2.4vw, 26px); margin: 0; }
+.menu-card__price { font-family: var(--font-mono); font-size: 15px; color: var(--gold); white-space: nowrap; }
+.menu-card__tagline {
+  font-family: var(--font-italic);
+  font-style: italic;
+  color: var(--ink-soft);
+  margin: 4px 0 10px;
+  font-size: 15px;
+}
+.menu-card__desc { color: var(--ink-soft); font-size: 14px; line-height: 1.6; margin: 0; }
