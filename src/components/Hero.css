@@ -6,6 +6,15 @@
   align-items: center;
   overflow: hidden;
 }
+/* Optional Backhaus dough photo behind the logo, under a heavy paper wash so the
+   dark Caslon mark + CTA stay crisp. Toggled by HERO_PHOTO_BG in Hero.tsx. */
+.hero--photo {
+  background-color: var(--paper);
+  background-image: linear-gradient(rgba(246, 245, 241, 0.86), rgba(246, 245, 241, 0.92)), url('/dough.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
 .hero__scroll {
   position: absolute;
   left: 50%;
