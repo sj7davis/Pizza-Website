@@ -18,43 +18,45 @@ vi.mock('../../lib/trpc', () => ({
 import { BrandEditor } from '../BrandEditor'
 
 beforeEach(() => {
-  updateMutate.mockClear()
+  updateMutate.mockReset().mockResolvedValue({})
   getState.data = {
-    brandName: 'PBB',
-    tagline: 'tag',
-    orderLinks: [{ label: 'Uber Eats', url: '#' }],
-    openTime: '17:00',
-    closeTime: '21:00',
-    timezone: 'UTC',
-    soldOut: false,
-    soldOutMessage: 'x',
-    storyEyebrow: 'Our story',
-    storyHeading: 'Heading',
-    storyParagraphs: ['Para one.', 'Para two.'],
-    storyPullquote: 'Quote',
-    storyEstablished: 'est',
-    deliveryArea: 'Airport West',
-    deliveryHours: '5-9pm',
+    brandName: 'PBB', tagline: 'tag',
+    orderLinks: [{ label: 'Uber Eats', url: '#ue' }],
+    openTime: '17:00', closeTime: '21:00', timezone: 'Australia/Melbourne',
+    soldOut: false, soldOutMessage: 'Sold out tonight',
+    storyEyebrow: 'Our story', storyHeading: 'Heading', storyParagraphs: ['Para one.', 'Para two.'],
+    storyPullquote: 'Quote', storyEstablished: 'est',
+    deliveryArea: 'Airport West', deliveryHours: '5-9pm',
     socials: [{ label: 'Instagram', href: '#ig' }],
   }
 })
 
 describe('BrandEditor', () => {
-  it('prefills the form from site content', () => {
+  it('prefills order link, hours and sold-out fields', () => {
     render(<BrandEditor />)
-    expect(screen.getByLabelText(/brand name/i)).toHaveValue('PBB')
-    expect(screen.getByLabelText(/story heading/i)).toHaveValue('Heading')
+    expect(screen.getByLabelText(/order link 1 label/i)).toHaveValue('Uber Eats')
+    expect(screen.getByLabelText(/order link 1 url/i)).toHaveValue('#ue')
+    expect(screen.getByLabelText(/opens \(24h/i)).toHaveValue('17:00')
+    expect(screen.getByLabelText(/sold out/i)).not.toBeChecked()
   })
 
-  it('saves the assembled nested input', async () => {
+  it('saves the assembled input and shows Saved', async () => {
     render(<BrandEditor />)
-    fireEvent.change(screen.getByLabelText(/story heading/i), { target: { value: 'New heading' } })
+    fireEvent.change(screen.getByLabelText(/order link 1 url/i), { target: { value: 'https://ubereats.com/pbb' } })
+    fireEvent.click(screen.getByLabelText(/sold out/i))
     fireEvent.click(screen.getByRole('button', { name: /^save$/i }))
     await waitFor(() => expect(updateMutate).toHaveBeenCalled())
     const arg = updateMutate.mock.calls[0][0]
-    expect(arg.story.heading).toBe('New heading')
-    expect(arg.story.paragraphs).toEqual(['Para one.', 'Para two.'])
-    expect(arg.delivery.area).toBe('Airport West')
-    expect(arg.socials[0]).toEqual({ label: 'Instagram', href: '#ig' })
+    expect(arg.orderLinks[0]).toEqual({ label: 'Uber Eats', url: 'https://ubereats.com/pbb' })
+    expect(arg.soldOut).toBe(true)
+    expect(arg.openTime).toBe('17:00')
+    expect(await screen.findByText(/saved/i)).toBeInTheDocument()
+  })
+
+  it('shows an error when saving fails', async () => {
+    updateMutate.mockRejectedValue(new Error('bad'))
+    render(<BrandEditor />)
+    fireEvent.click(screen.getByRole('button', { name: /^save$/i }))
+    expect(await screen.findByRole('alert')).toHaveTextContent(/could not save/i)
   })
 })
