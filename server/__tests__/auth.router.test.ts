@@ -30,9 +30,12 @@ describe('auth router', () => {
       session: { create },
     } as never
     const c = { header: vi.fn() } as never
-    const caller = appRouter.createCaller({ db, c, user: null })
+    const resHeaders = new Headers()
+    const caller = appRouter.createCaller({ db, c, user: null, resHeaders })
     const res = await caller.auth.login({ email: 'a@b.c', password: 'rightpass' })
     expect(res).toEqual({ id: 'u1', email: 'a@b.c' })
     expect(create).toHaveBeenCalled()
+    // The session cookie must actually be written to the response headers.
+    expect(resHeaders.get('Set-Cookie')).toMatch(/pbv_session=sess_1/)
   })
 })

@@ -11,7 +11,14 @@ import './theme.css'
 
 const queryClient = new QueryClient()
 const trpcClient = trpc.createClient({
-  links: [httpBatchLink({ url: '/api/trpc', transformer: superjson })],
+  links: [
+    httpBatchLink({
+      url: '/api/trpc',
+      transformer: superjson,
+      // Send/receive the session cookie on every request.
+      fetch: (url, options) => fetch(url, { ...options, credentials: 'include' }),
+    }),
+  ],
 })
 
 createRoot(document.getElementById('root')!).render(
