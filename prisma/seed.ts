@@ -1,9 +1,24 @@
 import { PrismaClient } from '@prisma/client'
 import { content } from '../src/content'
+import { hashPassword } from '../server/auth/password'
 
 const prisma = new PrismaClient()
 
 async function main() {
+  // Seed the first owner from env (idempotent — only if that email has no account yet).
+  const adminEmail = process.env.ADMIN_EMAIL
+  const adminPassword = process.env.ADMIN_PASSWORD
+  if (adminEmail && adminPassword) {
+    const existing = await prisma.adminUser.findUnique({ where: { email: adminEmail } })
+    if (!existing) {
+      await prisma.adminUser.create({
+        data: { email: adminEmail, passwordHash: await hashPassword(adminPassword) },
+      })
+      // eslint-disable-next-line no-console
+      console.log(`Seeded admin owner: ${adminEmail}`)
+    }
+  }
+
   await prisma.siteContent.upsert({
     where: { id: 1 },
     update: {},

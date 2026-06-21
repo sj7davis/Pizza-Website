@@ -6,6 +6,20 @@
   align-items: center;
   overflow: hidden;
 }
+/* Optional Backhaus dough photo behind the logo: a cinematic dark treatment so the
+   photo reads clearly while the (now light) logo + text stay legible. Toggled by
+   HERO_PHOTO_BG in Hero.tsx — set it false to return to the plain off-white hero. */
+.hero--photo {
+  background-color: var(--ink);
+  background-image: linear-gradient(rgba(18, 17, 13, 0.5), rgba(18, 17, 13, 0.7)), url('/dough.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.hero--photo .logo { color: var(--paper); }
+.hero--photo .hero__tagline { color: #e9e3d6; }
+.hero--photo .hero__scroll { color: #d7d0c2; }
+.hero--photo .hero__scroll:hover { color: #fff; }
 .hero__scroll {
   position: absolute;
   left: 50%;

@@ -11,6 +11,10 @@ interface HeroProps {
 
 const easing = [0.22, 1, 0.36, 1] as const
 
+// Toggle the dough photo behind the hero logo. Set to false to remove it (and
+// the Story section's dark background returns to being the only image-free option).
+const HERO_PHOTO_BG = true
+
 export function Hero({ brandName, tagline, uberEatsUrl }: HeroProps) {
   const reduce = useReducedMotion()
   const step = (i: number) =>
@@ -23,7 +27,7 @@ export function Hero({ brandName, tagline, uberEatsUrl }: HeroProps) {
         }
 
   return (
-    <header className="hero">
+    <header className={HERO_PHOTO_BG ? 'hero hero--photo' : 'hero'}>
       <div className="hero__grain" aria-hidden="true" />
       <div className="container hero__inner">
         <div className="label hero__eyebrow">Pizza by Backhaus · Delivered</div>
