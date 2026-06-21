@@ -9,6 +9,8 @@ describe('App', () => {
     expect(screen.getAllByRole('img', { name: /PBB/i }).length).toBeGreaterThanOrEqual(1)
     expect(screen.getByText('Margherita')).toBeInTheDocument()
     expect(screen.getByText(/Airport West/)).toBeInTheDocument()
-    expect(screen.getAllByRole('link', { name: /order on uber eats/i }).length).toBeGreaterThanOrEqual(2)
+    // Footer order buttons are never disabled by open/closed status; Hero's may be
+    // disabled (rendered as <span>, not <a>) depending on the current real time.
+    expect(screen.getAllByRole('link', { name: /order on uber eats/i }).length).toBeGreaterThanOrEqual(1)
   })
 })
