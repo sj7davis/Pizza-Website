@@ -51,3 +51,6 @@ export const addOwnerInput = z.object({
   email: z.string().email({ pattern: /^[^@\s]+@[^@\s]+\.[^@\s]+$/ }),
   password: z.string().min(8),
 })
+
+export const emailInput = z.object({ email: z.string().email({ pattern: /^[^@\s]+@[^@\s]+\.[^@\s]+$/ }) })
+export const orderClickInput = z.object({ platform: z.string().min(1).max(60) })
