@@ -5,17 +5,21 @@ import './Footer.css'
 
 interface FooterProps {
   brandName: string
-  uberEatsUrl: string
+  orderLinks: { label: string; url: string }[]
   socials: SocialLink[]
 }
 
-export function Footer({ brandName, uberEatsUrl, socials }: FooterProps) {
+export function Footer({ brandName, orderLinks, socials }: FooterProps) {
   return (
     <footer className="footer">
       <div className="container footer__inner">
         <div className="footer__cta">
           <h2 className="footer__heading">Hungry yet?</h2>
-          <OrderButton href={uberEatsUrl} />
+          <div className="footer__orders">
+            {orderLinks.map((link) => (
+              <OrderButton key={link.label} label={`Order on ${link.label}`} url={link.url} />
+            ))}
+          </div>
         </div>
         <div className="footer__meta">
           <Logo text={brandName} />

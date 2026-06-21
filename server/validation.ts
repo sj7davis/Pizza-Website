@@ -14,10 +14,18 @@ export const menuUpdateInput = menuItemInput.partial().extend({ id: z.string().m
 
 export const socialLinkSchema = z.object({ label: z.string().min(1), href: z.string().min(1) })
 
+export const orderLinkSchema = z.object({ label: z.string().min(1), url: z.string().min(1) })
+export const orderLinksSchema = z.array(orderLinkSchema)
+
 export const siteUpdateInput = z.object({
   brandName: z.string().min(1),
   tagline: z.string().min(1),
-  uberEatsUrl: z.string().min(1),
+  orderLinks: orderLinksSchema.min(1),
+  openTime: z.string().regex(/^\d{2}:\d{2}$/),
+  closeTime: z.string().regex(/^\d{2}:\d{2}$/),
+  timezone: z.string().min(1),
+  soldOut: z.boolean(),
+  soldOutMessage: z.string().min(1),
   story: z.object({
     eyebrow: z.string().min(1),
     heading: z.string().min(1),

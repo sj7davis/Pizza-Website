@@ -6,7 +6,12 @@ function toColumns(input: z.infer<typeof siteUpdateInput>) {
   return {
     brandName: input.brandName,
     tagline: input.tagline,
-    uberEatsUrl: input.uberEatsUrl,
+    orderLinks: input.orderLinks,
+    openTime: input.openTime,
+    closeTime: input.closeTime,
+    timezone: input.timezone,
+    soldOut: input.soldOut,
+    soldOutMessage: input.soldOutMessage,
     storyEyebrow: input.story.eyebrow,
     storyHeading: input.story.heading,
     storyParagraphs: input.story.paragraphs,

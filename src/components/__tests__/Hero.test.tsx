@@ -3,10 +3,21 @@ import { render, screen } from '@testing-library/react'
 import { Hero } from '../Hero'
 
 describe('Hero', () => {
-  it('shows the brand, tagline and an Uber Eats CTA', () => {
-    render(<Hero brandName="PBV" tagline="Slow dough." uberEatsUrl="#x" />)
-    expect(screen.getByRole('img', { name: /PBV/i })).toBeInTheDocument()
+  it('shows the brand, tagline and order links', () => {
+    render(
+      <Hero
+        brandName="PBB"
+        tagline="Slow dough."
+        orderLinks={[{ label: 'Uber Eats', url: '#ue' }, { label: 'DoorDash', url: '#dd' }]}
+      />,
+    )
+    expect(screen.getByRole('img', { name: /PBB/i })).toBeInTheDocument()
     expect(screen.getByText('Slow dough.')).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: /order on uber eats/i })).toHaveAttribute('href', '#x')
+    expect(screen.getByRole('link', { name: /order on uber eats/i })).toHaveAttribute('href', '#ue')
+    expect(screen.getByRole('link', { name: /order on doordash/i })).toHaveAttribute('href', '#dd')
+  })
+  it('disables ordering when ordersDisabled', () => {
+    render(<Hero brandName="PBB" tagline="t" orderLinks={[{ label: 'Uber Eats', url: '#ue' }]} ordersDisabled />)
+    expect(screen.queryByRole('link', { name: /order on uber eats/i })).toBeNull()
   })
 })

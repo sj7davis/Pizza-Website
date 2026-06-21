@@ -7,3 +7,4 @@
 .footer__socials a { font-family: var(--font-ui); font-size: 13px; letter-spacing: 1px; color: var(--ink); text-decoration: none; }
 .footer__socials a:hover { color: var(--gold); }
 .footer__fine { font-family: var(--font-mono); font-size: 11px; color: var(--muted); margin: 0; }
+.footer__orders { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }

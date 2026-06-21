@@ -6,7 +6,8 @@ import './Hero.css'
 interface HeroProps {
   brandName: string
   tagline: string
-  uberEatsUrl: string
+  orderLinks: { label: string; url: string }[]
+  ordersDisabled?: boolean
 }
 
 const easing = [0.22, 1, 0.36, 1] as const
@@ -15,7 +16,7 @@ const easing = [0.22, 1, 0.36, 1] as const
 // the Story section's dark background returns to being the only image-free option).
 const HERO_PHOTO_BG = true
 
-export function Hero({ brandName, tagline, uberEatsUrl }: HeroProps) {
+export function Hero({ brandName, tagline, orderLinks, ordersDisabled }: HeroProps) {
   const reduce = useReducedMotion()
   const step = (i: number) =>
     reduce
@@ -36,8 +37,16 @@ export function Hero({ brandName, tagline, uberEatsUrl }: HeroProps) {
         </motion.h1>
         <motion.p className="hero__tagline" {...step(2)}>{tagline}</motion.p>
         <motion.div className="hero__line" {...step(3)} aria-hidden="true" />
-        <motion.div {...step(4)}>
-          <OrderButton href={uberEatsUrl} />
+        <motion.div className="hero__orders" {...step(4)}>
+          {orderLinks.map((link, i) => (
+            <OrderButton
+              key={link.label}
+              label={`Order on ${link.label}`}
+              url={link.url}
+              variant={i === 0 ? 'solid' : 'ghost'}
+              disabled={ordersDisabled}
+            />
+          ))}
         </motion.div>
       </div>
 

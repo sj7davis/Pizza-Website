@@ -12,14 +12,14 @@ export default function App() {
       <Hero
         brandName={content.brandName}
         tagline={content.tagline}
-        uberEatsUrl={content.uberEatsUrl}
+        orderLinks={content.orderLinks}
       />
       <Menu items={content.menu} />
       <Story story={content.story} />
       <Delivery area={content.delivery.area} hours={content.delivery.hours} />
       <Footer
         brandName={content.brandName}
-        uberEatsUrl={content.uberEatsUrl}
+        orderLinks={content.orderLinks}
         socials={content.socials}
       />
     </>

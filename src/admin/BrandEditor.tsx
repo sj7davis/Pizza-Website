@@ -9,6 +9,11 @@ interface BrandForm {
   brandName: string
   tagline: string
   uberEatsUrl: string
+  openTime: string
+  closeTime: string
+  timezone: string
+  soldOut: boolean
+  soldOutMessage: string
   eyebrow: string
   heading: string
   paragraphs: string // blank-line separated
@@ -22,7 +27,12 @@ interface BrandForm {
 interface SiteRow {
   brandName: string
   tagline: string
-  uberEatsUrl: string
+  orderLinks: { label: string; url: string }[]
+  openTime: string
+  closeTime: string
+  timezone: string
+  soldOut: boolean
+  soldOutMessage: string
   storyEyebrow: string
   storyHeading: string
   storyParagraphs: string[]
@@ -37,7 +47,12 @@ function rowToForm(r: SiteRow): BrandForm {
   return {
     brandName: r.brandName,
     tagline: r.tagline,
-    uberEatsUrl: r.uberEatsUrl,
+    uberEatsUrl: r.orderLinks[0]?.url ?? '',
+    openTime: r.openTime,
+    closeTime: r.closeTime,
+    timezone: r.timezone,
+    soldOut: r.soldOut,
+    soldOutMessage: r.soldOutMessage,
     eyebrow: r.storyEyebrow,
     heading: r.storyHeading,
     paragraphs: r.storyParagraphs.join('\n\n'),
@@ -53,7 +68,12 @@ function formToInput(f: BrandForm) {
   return {
     brandName: f.brandName,
     tagline: f.tagline,
-    uberEatsUrl: f.uberEatsUrl,
+    orderLinks: [{ label: 'Uber Eats', url: f.uberEatsUrl }],
+    openTime: f.openTime,
+    closeTime: f.closeTime,
+    timezone: f.timezone,
+    soldOut: f.soldOut,
+    soldOutMessage: f.soldOutMessage,
     story: {
       eyebrow: f.eyebrow,
       heading: f.heading,

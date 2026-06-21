@@ -22,12 +22,24 @@ async function main() {
 
   await prisma.siteContent.upsert({
     where: { id: 1 },
-    update: {},
+    update: {
+      orderLinks: content.orderLinks as object,
+      openTime: content.openTime,
+      closeTime: content.closeTime,
+      timezone: content.timezone,
+      soldOutMessage: content.soldOutMessage,
+      // NOTE: do not overwrite soldOut here — it's an owner toggle.
+    },
     create: {
       id: 1,
       brandName: content.brandName,
       tagline: content.tagline,
-      uberEatsUrl: content.uberEatsUrl,
+      orderLinks: content.orderLinks as object,
+      openTime: content.openTime,
+      closeTime: content.closeTime,
+      timezone: content.timezone,
+      soldOut: content.soldOut,
+      soldOutMessage: content.soldOutMessage,
       storyEyebrow: content.story.eyebrow,
       storyHeading: content.story.heading,
       storyParagraphs: content.story.paragraphs as object,

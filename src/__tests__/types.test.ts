@@ -14,7 +14,8 @@ describe('types', () => {
     const sample: SiteContent = {
       brandName: 'PBV',
       tagline: 't',
-      uberEatsUrl: '#',
+      orderLinks: [{ label: 'Uber Eats', url: '#' }],
+      openTime: '17:00', closeTime: '21:00', timezone: 'UTC', soldOut: false, soldOutMessage: 'x',
       story,
       menu: [item],
       delivery: { area: 'a', hours: 'h' },

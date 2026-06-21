@@ -22,7 +22,12 @@ beforeEach(() => {
   getState.data = {
     brandName: 'PBB',
     tagline: 'tag',
-    uberEatsUrl: '#',
+    orderLinks: [{ label: 'Uber Eats', url: '#' }],
+    openTime: '17:00',
+    closeTime: '21:00',
+    timezone: 'UTC',
+    soldOut: false,
+    soldOutMessage: 'x',
     storyEyebrow: 'Our story',
     storyHeading: 'Heading',
     storyParagraphs: ['Para one.', 'Para two.'],

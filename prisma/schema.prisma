@@ -24,7 +24,12 @@ model SiteContent {
   id               Int      @id @default(1)
   brandName        String
   tagline          String
-  uberEatsUrl      String
+  orderLinks       Json
+  openTime         String
+  closeTime        String
+  timezone         String
+  soldOut          Boolean  @default(false)
+  soldOutMessage   String
   storyEyebrow     String
   storyHeading     String
   storyParagraphs  Json

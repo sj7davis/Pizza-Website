@@ -17,7 +17,9 @@ describe('mappers', () => {
   it('rowsToSiteContent assembles story + delivery + socials', () => {
     const site = rowsToSiteContent(
       {
-        brandName: 'PBV', tagline: 'tag', uberEatsUrl: '#',
+        brandName: 'PBV', tagline: 'tag',
+        orderLinks: [{ label: 'Uber Eats', url: '#' }],
+        openTime: '17:00', closeTime: '21:00', timezone: 'UTC', soldOut: false, soldOutMessage: 'x',
         storyEyebrow: 'Our story', storyHeading: 'h', storyParagraphs: ['p1', 'p2'],
         storyPullquote: 'q', storyEstablished: 'est',
         deliveryArea: 'Airport West', deliveryHours: '5-9pm',
