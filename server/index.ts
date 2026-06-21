@@ -5,8 +5,10 @@ import { trpcServer } from '@hono/trpc-server'
 import { appRouter } from './trpc/routers/app'
 import { createContext } from './trpc/context'
 import { handleUpload } from './upload'
+import { securityHeaders } from './security'
 
 export const app = new Hono()
+app.use('*', securityHeaders)
 
 app.get('/api/health', (c) => c.json({ ok: true }))
 

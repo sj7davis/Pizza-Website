@@ -4,6 +4,7 @@ import { getCookie } from 'hono/cookie'
 import { router, publicProcedure } from '../trpc'
 import { hashPassword, verifyPassword } from '../../auth/password'
 import { createSession, deleteSession, SESSION_COOKIE, SESSION_TTL_MS } from '../../auth/session'
+import { checkRateLimit } from '../../auth/rateLimit'
 
 // A dummy hash verified when the email is unknown, so login takes comparable
 // time whether or not the account exists (prevents email enumeration via timing).
@@ -36,6 +37,17 @@ export const authRouter = router({
       }),
     )
     .mutation(async ({ ctx, input }) => {
+      const ip =
+        ctx.c.req.header('x-forwarded-for')?.split(',')[0]?.trim() ||
+        ctx.c.req.header('x-real-ip') ||
+        'unknown'
+      const rl = checkRateLimit(ip)
+      if (!rl.ok) {
+        throw new TRPCError({
+          code: 'TOO_MANY_REQUESTS',
+          message: `Too many attempts. Try again in ${rl.retryAfterSeconds}s.`,
+        })
+      }
       const user = await ctx.db.adminUser.findUnique({ where: { email: input.email } })
       // Always run a verify (even when the user is missing) to keep timing uniform.
       const hash = user?.passwordHash ?? (await getDummyHash())
