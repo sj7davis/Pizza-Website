@@ -11,10 +11,10 @@ vi.mock('../../lib/trpc', () => ({
     useUtils: () => ({ menu: { list: { invalidate } } }),
     menu: {
       list: { useQuery: () => listState },
-      create: { useMutation: () => ({ mutateAsync: createMutate, isPending: false }) },
-      update: { useMutation: () => ({ mutateAsync: vi.fn(), isPending: false }) },
-      delete: { useMutation: () => ({ mutate: deleteMutate, mutateAsync: deleteMutate, isPending: false }) },
-      reorder: { useMutation: () => ({ mutate: vi.fn(), isPending: false }) },
+      create: { useMutation: (o?: { onSuccess?: () => void }) => ({ mutateAsync: async (v: unknown) => { const r = await createMutate(v); o?.onSuccess?.(); return r }, isPending: false }) },
+      update: { useMutation: (o?: { onSuccess?: () => void }) => ({ mutateAsync: async (v: unknown) => { o?.onSuccess?.(); return v }, isPending: false }) },
+      delete: { useMutation: (o?: { onSuccess?: () => void }) => ({ mutate: (v: unknown) => { deleteMutate(v); o?.onSuccess?.() }, isPending: false }) },
+      reorder: { useMutation: (o?: { onSuccess?: () => void }) => ({ mutate: () => o?.onSuccess?.(), isPending: false }) },
     },
   },
 }))
@@ -49,6 +49,7 @@ describe('MenuManager', () => {
     await waitFor(() =>
       expect(createMutate).toHaveBeenCalledWith(expect.objectContaining({ name: 'Capricciosa', price: '$28' })),
     )
+    expect(await screen.findByText(/saved/i)).toBeInTheDocument()
   })
 
   it('deletes an item after confirmation', () => {

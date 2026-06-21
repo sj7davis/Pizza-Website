@@ -62,3 +62,5 @@
   max-width: 22ch;
 }
 .hero__line { width: 56px; height: 2px; background: var(--gold-foil); margin: 28px 0; }
+.hero__status { margin: 0 0 14px; }
+.hero__orders { display: flex; flex-wrap: wrap; gap: 12px; }

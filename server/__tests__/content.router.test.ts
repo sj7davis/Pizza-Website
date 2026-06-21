@@ -6,7 +6,9 @@ function makeDb() {
   return {
     siteContent: {
       findUnique: vi.fn().mockResolvedValue({
-        brandName: 'PBV', tagline: 'tag', uberEatsUrl: '#',
+        brandName: 'PBV', tagline: 'tag',
+        orderLinks: [{ label: 'Uber Eats', url: '#' }],
+        openTime: '17:00', closeTime: '21:00', timezone: 'UTC', soldOut: false, soldOutMessage: 'x',
         storyEyebrow: 'Our story', storyHeading: 'h', storyParagraphs: ['p1'],
         storyPullquote: 'q', storyEstablished: 'est',
         deliveryArea: 'Airport West', deliveryHours: '5-9pm',

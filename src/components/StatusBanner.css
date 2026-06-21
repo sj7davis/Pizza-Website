@@ -1,0 +1,2 @@
+.status-banner { width: 100%; text-align: center; padding: 9px 16px; font-family: var(--font-ui); font-size: 12px; letter-spacing: 2px; text-transform: uppercase; background: var(--ink); color: var(--paper); }
+.status-banner[data-state="soldout"] { background: #8c3a1f; }

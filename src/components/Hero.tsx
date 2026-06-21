@@ -1,12 +1,16 @@
 import { motion, useReducedMotion } from 'motion/react'
 import { Logo } from './Logo'
 import { OrderButton } from './OrderButton'
+import { OrderStatus } from './OrderStatus'
+import type { OpenStatus } from '../lib/openStatus'
 import './Hero.css'
 
 interface HeroProps {
   brandName: string
   tagline: string
-  uberEatsUrl: string
+  orderLinks: { label: string; url: string }[]
+  ordersDisabled?: boolean
+  status?: OpenStatus
 }
 
 const easing = [0.22, 1, 0.36, 1] as const
@@ -15,7 +19,7 @@ const easing = [0.22, 1, 0.36, 1] as const
 // the Story section's dark background returns to being the only image-free option).
 const HERO_PHOTO_BG = true
 
-export function Hero({ brandName, tagline, uberEatsUrl }: HeroProps) {
+export function Hero({ brandName, tagline, orderLinks, ordersDisabled, status }: HeroProps) {
   const reduce = useReducedMotion()
   const step = (i: number) =>
     reduce
@@ -36,8 +40,21 @@ export function Hero({ brandName, tagline, uberEatsUrl }: HeroProps) {
         </motion.h1>
         <motion.p className="hero__tagline" {...step(2)}>{tagline}</motion.p>
         <motion.div className="hero__line" {...step(3)} aria-hidden="true" />
-        <motion.div {...step(4)}>
-          <OrderButton href={uberEatsUrl} />
+        {status && (
+          <div className="hero__status">
+            <OrderStatus status={status} />
+          </div>
+        )}
+        <motion.div className="hero__orders" {...step(4)}>
+          {orderLinks.map((link, i) => (
+            <OrderButton
+              key={link.label}
+              label={`Order on ${link.label}`}
+              url={link.url}
+              variant={i === 0 ? 'solid' : 'ghost'}
+              disabled={ordersDisabled}
+            />
+          ))}
         </motion.div>
       </div>
 

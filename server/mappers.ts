@@ -1,5 +1,5 @@
 import type { SiteContent, MenuItem } from '../shared/contract'
-import { paragraphsSchema, socialsSchema } from './validation'
+import { paragraphsSchema, socialsSchema, orderLinksSchema } from './validation'
 
 export interface MenuItemRow {
   name: string
@@ -12,7 +12,12 @@ export interface MenuItemRow {
 export interface SiteContentRow {
   brandName: string
   tagline: string
-  uberEatsUrl: string
+  orderLinks: unknown
+  openTime: string
+  closeTime: string
+  timezone: string
+  soldOut: boolean
+  soldOutMessage: string
   storyEyebrow: string
   storyHeading: string
   storyParagraphs: unknown
@@ -38,7 +43,12 @@ export function rowsToSiteContent(site: SiteContentRow, menuRows: MenuItemRow[])
   return {
     brandName: site.brandName,
     tagline: site.tagline,
-    uberEatsUrl: site.uberEatsUrl,
+    orderLinks: orderLinksSchema.parse(site.orderLinks),
+    openTime: site.openTime,
+    closeTime: site.closeTime,
+    timezone: site.timezone,
+    soldOut: site.soldOut,
+    soldOutMessage: site.soldOutMessage,
     story: {
       eyebrow: site.storyEyebrow,
       heading: site.storyHeading,

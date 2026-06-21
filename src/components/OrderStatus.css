@@ -1,0 +1,5 @@
+.order-status { display: inline-flex; align-items: center; gap: 8px; font-family: var(--font-ui); font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; }
+.order-status__dot { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); }
+.order-status[data-state="open"] .order-status__dot { background: #3ea66a; }
+.order-status[data-state="soldout"] .order-status__dot { background: #c0552e; }
+.order-status[data-state="open"] .order-status__label { color: var(--gold); }

@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { TRPCError } from '@trpc/server'
-import { setCookie, deleteCookie, getCookie } from 'hono/cookie'
+import { getCookie } from 'hono/cookie'
 import { router, publicProcedure } from '../trpc'
 import { hashPassword, verifyPassword } from '../../auth/password'
 import { createSession, deleteSession, SESSION_COOKIE, SESSION_TTL_MS } from '../../auth/session'
@@ -10,6 +10,19 @@ import { createSession, deleteSession, SESSION_COOKIE, SESSION_TTL_MS } from '..
 let dummyHashPromise: Promise<string> | null = null
 function getDummyHash(): Promise<string> {
   return (dummyHashPromise ??= hashPassword('pbv-unused-dummy-password'))
+}
+
+/** Serialize the session cookie. Written to the tRPC response via resHeaders. */
+function sessionCookie(token: string, maxAgeSeconds: number): string {
+  const parts = [
+    `${SESSION_COOKIE}=${token}`,
+    'HttpOnly',
+    'Path=/',
+    'SameSite=Lax',
+    `Max-Age=${maxAgeSeconds}`,
+  ]
+  if (process.env.COOKIE_SECURE === 'true') parts.push('Secure')
+  return parts.join('; ')
 }
 
 export const authRouter = router({
@@ -31,20 +44,17 @@ export const authRouter = router({
         throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Invalid email or password' })
       }
       const token = await createSession(ctx.db, user.id)
-      setCookie(ctx.c, SESSION_COOKIE, token, {
-        httpOnly: true,
-        secure: process.env.COOKIE_SECURE === 'true',
-        sameSite: 'Lax',
-        path: '/',
-        maxAge: Math.floor(SESSION_TTL_MS / 1000),
-      })
+      ctx.resHeaders?.append(
+        'Set-Cookie',
+        sessionCookie(token, Math.floor(SESSION_TTL_MS / 1000)),
+      )
       return { id: user.id, email: user.email }
     }),
 
   logout: publicProcedure.mutation(async ({ ctx }) => {
     const token = getCookie(ctx.c, SESSION_COOKIE)
     await deleteSession(ctx.db, token)
-    deleteCookie(ctx.c, SESSION_COOKIE, { path: '/' })
+    ctx.resHeaders?.append('Set-Cookie', sessionCookie('', 0))
     return { ok: true }
   }),
 })

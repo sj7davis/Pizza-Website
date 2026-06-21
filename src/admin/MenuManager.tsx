@@ -1,15 +1,19 @@
 import { useState } from 'react'
 import { trpc } from '../lib/trpc'
 import { MenuItemForm } from './MenuItemForm'
+import { SaveStatus, type SaveState } from './SaveStatus'
 
 export function MenuManager() {
   const utils = trpc.useUtils()
   const list = trpc.menu.list.useQuery()
   const invalidate = () => utils.menu.list.invalidate()
-  const create = trpc.menu.create.useMutation({ onSuccess: invalidate })
-  const update = trpc.menu.update.useMutation({ onSuccess: invalidate })
-  const del = trpc.menu.delete.useMutation({ onSuccess: invalidate })
-  const reorder = trpc.menu.reorder.useMutation({ onSuccess: invalidate })
+  const [save, setSave] = useState<SaveState>({ status: 'idle' })
+  const onErr = () => setSave({ status: 'error', message: 'Could not save — try again.' })
+  const onOk = () => { invalidate(); setSave({ status: 'saved' }) }
+  const create = trpc.menu.create.useMutation({ onSuccess: onOk, onError: onErr })
+  const update = trpc.menu.update.useMutation({ onSuccess: onOk, onError: onErr })
+  const del = trpc.menu.delete.useMutation({ onSuccess: onOk, onError: onErr })
+  const reorder = trpc.menu.reorder.useMutation({ onSuccess: onOk, onError: onErr })
   const [editing, setEditing] = useState<string | 'new' | null>(null)
 
   if (list.isLoading) return <p>Loading menu…</p>
@@ -29,13 +33,17 @@ export function MenuManager() {
     <section className="admin-panel">
       <div className="admin-panel-head">
         <h2>Menu</h2>
-        <button onClick={() => setEditing('new')}>+ Add pizza</button>
+        <div className="admin-actions">
+          <SaveStatus state={save} />
+          <button onClick={() => { setEditing('new'); setSave({ status: 'idle' }) }}>+ Add pizza</button>
+        </div>
       </div>
 
       {editing === 'new' && (
         <MenuItemForm
           submitting={create.isPending}
           onSubmit={async (v) => {
+            setSave({ status: 'saving' })
             await create.mutateAsync(v)
             setEditing(null)
           }}
@@ -51,6 +59,7 @@ export function MenuManager() {
                 initial={it}
                 submitting={update.isPending}
                 onSubmit={async (v) => {
+                  setSave({ status: 'saving' })
                   await update.mutateAsync({ id: it.id, ...v })
                   setEditing(null)
                 }}

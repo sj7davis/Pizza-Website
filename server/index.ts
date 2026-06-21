@@ -14,8 +14,8 @@ app.use(
   '/api/trpc/*',
   trpcServer({
     router: appRouter,
-    createContext: (_opts, c) =>
-      createContext(c) as unknown as Promise<Record<string, unknown>>,
+    createContext: (opts, c) =>
+      createContext(c, opts.resHeaders) as unknown as Promise<Record<string, unknown>>,
   }),
 )
 

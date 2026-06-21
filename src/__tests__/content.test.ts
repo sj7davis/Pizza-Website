@@ -20,7 +20,13 @@ describe('content', () => {
     expect(content.story.paragraphs.join(' ')).toMatch(/Backhaus/)
     expect(content.story.pullquote.length).toBeGreaterThan(0)
   })
-  it('defines an Uber Eats url field', () => {
-    expect(typeof content.uberEatsUrl).toBe('string')
+  it('has at least one order link', () => {
+    expect(content.orderLinks.length).toBeGreaterThanOrEqual(1)
+    expect(content.orderLinks[0].url.length).toBeGreaterThan(0)
+  })
+  it('defines open/close hours and a timezone', () => {
+    expect(content.openTime).toMatch(/^\d{2}:\d{2}$/)
+    expect(content.closeTime).toMatch(/^\d{2}:\d{2}$/)
+    expect(content.timezone.length).toBeGreaterThan(0)
   })
 })

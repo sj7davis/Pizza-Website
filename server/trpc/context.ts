@@ -8,10 +8,12 @@ export interface Context {
   db: PrismaClient
   c: HonoContext
   user: SessionUser | null
+  /** Headers merged into the tRPC HTTP response — the correct place to Set-Cookie. */
+  resHeaders?: Headers
 }
 
-export async function createContext(c: HonoContext): Promise<Context> {
+export async function createContext(c: HonoContext, resHeaders?: Headers): Promise<Context> {
   const token = getCookie(c, SESSION_COOKIE)
   const user = await findValidUser(prisma, token)
-  return { db: prisma, c, user }
+  return { db: prisma, c, user, resHeaders }
 }

@@ -3,8 +3,13 @@ import type { SiteContent } from './types'
 export const content: SiteContent = {
   brandName: 'PBB',
   tagline: 'Wild-yeast dough, 48 hours in the making.',
-  // TODO: replace with the live Uber Eats store URL when available.
-  uberEatsUrl: 'https://www.ubereats.com/',
+  // TODO: add the live Uber Eats store URL + any other platforms (DoorDash/Menulog).
+  orderLinks: [{ label: 'Uber Eats', url: 'https://www.ubereats.com/' }],
+  openTime: '17:00',
+  closeTime: '21:00',
+  timezone: 'Australia/Melbourne',
+  soldOut: false,
+  soldOutMessage: 'Sold out for tonight — back tomorrow at 5pm.',
   story: {
     eyebrow: 'Our story',
     heading: 'From the Backhaus bench',
