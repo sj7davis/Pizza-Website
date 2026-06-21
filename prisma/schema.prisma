@@ -24,12 +24,12 @@ model SiteContent {
   id               Int      @id @default(1)
   brandName        String
   tagline          String
-  orderLinks       Json
-  openTime         String
-  closeTime        String
-  timezone         String
+  orderLinks       Json     @default("[]")
+  openTime         String   @default("17:00")
+  closeTime        String   @default("21:00")
+  timezone         String   @default("Australia/Melbourne")
   soldOut          Boolean  @default(false)
-  soldOutMessage   String
+  soldOutMessage   String   @default("Sold out for tonight — back tomorrow at 5pm.")
   storyEyebrow     String
   storyHeading     String
   storyParagraphs  Json

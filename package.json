@@ -11,7 +11,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "dev:server": "tsx watch server/index.ts",
-    "start": "prisma db push --skip-generate && tsx prisma/seed.ts && tsx server/index.ts",
+    "start": "prisma db push --skip-generate --accept-data-loss && tsx prisma/seed.ts && tsx server/index.ts",
     "postinstall": "prisma generate",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
