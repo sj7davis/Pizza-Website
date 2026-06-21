@@ -60,6 +60,7 @@ async function main() {
         description: m.description,
         price: m.price,
         image: m.image ?? null,
+        tags: m.tags ?? [],
         sortOrder: i,
         available: true,
       })),

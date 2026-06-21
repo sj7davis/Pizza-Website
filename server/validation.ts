@@ -6,6 +6,7 @@ export const menuItemInput = z.object({
   description: z.string().min(1),
   price: z.string().min(1),
   image: z.string().nullable().optional(),
+  tags: z.array(z.string()).optional(),
   available: z.boolean().optional(),
   sortOrder: z.number().int().optional(),
 })

@@ -22,6 +22,13 @@ export function MenuCard({ item }: MenuCardProps) {
           <span className="menu-card__price">{item.price}</span>
         </div>
         <p className="menu-card__tagline">{item.tagline}</p>
+        {item.tags && item.tags.length > 0 && (
+          <ul className="menu-card__tags" aria-label="dietary and spice tags">
+            {item.tags.map((t) => (
+              <li className="menu-card__tag" key={t}>{t}</li>
+            ))}
+          </ul>
+        )}
         <p className="menu-card__desc">{item.description}</p>
       </div>
     </article>

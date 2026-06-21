@@ -7,6 +7,7 @@ export interface MenuItemRow {
   description: string
   price: string
   image: string | null
+  tags: string[]
 }
 
 export interface SiteContentRow {
@@ -36,6 +37,7 @@ export function rowToMenuItem(row: MenuItemRow): MenuItem {
     price: row.price,
   }
   if (row.image) item.image = row.image
+  if (row.tags?.length) item.tags = row.tags
   return item
 }
 

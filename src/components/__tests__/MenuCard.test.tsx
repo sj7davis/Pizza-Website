@@ -27,4 +27,10 @@ describe('MenuCard', () => {
     expect(screen.getByRole('img', { name: /Margherita/i })).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'Margherita' })).toBeInTheDocument()
   })
+
+  it('renders dietary/spice tags when present', () => {
+    render(<MenuCard item={{ name: 'Funghi', tagline: 't', description: 'd', price: '$25', tags: ['V', '🌶️'] }} />)
+    expect(screen.getByText('V')).toBeInTheDocument()
+    expect(screen.getByText('🌶️')).toBeInTheDocument()
+  })
 })

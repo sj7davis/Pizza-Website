@@ -7,6 +7,8 @@ export interface MenuItem {
   price: string
   /** Optional image URL/path. When absent, an on-brand placeholder renders. */
   image?: string
+  /** Optional dietary/spice tags, e.g. ['V'] or ['🌶️🌶️']. */
+  tags?: string[]
 }
 
 export interface SocialLink {
