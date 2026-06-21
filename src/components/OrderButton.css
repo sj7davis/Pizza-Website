@@ -16,4 +16,16 @@
 .order-btn--ghost { background: transparent; color: var(--ink); border: 1px solid var(--ink); }
 .order-btn:hover { transform: translateY(-2px); }
 .order-btn__arrow { font-weight: 700; }
-.order-btn--disabled { opacity: 0.45; cursor: not-allowed; pointer-events: none; }
+/* Closed/sold-out state: a clear outlined pill (no opacity wash). */
+.order-btn--disabled {
+  background: transparent;
+  border: 1px solid rgba(21, 20, 15, 0.35);
+  color: rgba(21, 20, 15, 0.6);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+/* On the dark photo hero, use a light outline so it stays legible. */
+.hero--photo .order-btn--disabled {
+  border-color: rgba(255, 255, 255, 0.45);
+  color: rgba(255, 255, 255, 0.8);
+}
