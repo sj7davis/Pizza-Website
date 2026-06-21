@@ -40,3 +40,12 @@ export const siteUpdateInput = z.object({
 
 export const paragraphsSchema = z.array(z.string())
 export const socialsSchema = z.array(socialLinkSchema)
+
+export const changePasswordInput = z.object({
+  currentPassword: z.string().min(1),
+  newPassword: z.string().min(8),
+})
+export const addOwnerInput = z.object({
+  email: z.string().email({ pattern: /^[^@\s]+@[^@\s]+\.[^@\s]+$/ }),
+  password: z.string().min(8),
+})

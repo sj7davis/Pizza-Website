@@ -3,12 +3,14 @@ import { contentRouter } from './content'
 import { authRouter } from './auth'
 import { menuRouter } from './menu'
 import { siteRouter } from './site'
+import { ownersRouter } from './owners'
 
 export const appRouter = router({
   content: contentRouter,
   auth: authRouter,
   menu: menuRouter,
   site: siteRouter,
+  owners: ownersRouter,
 })
 
 export type AppRouter = typeof appRouter
