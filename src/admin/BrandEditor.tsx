@@ -22,6 +22,7 @@ interface BrandForm {
   area: string
   hours: string
   socials: SocialRow[]
+  deliverySuburbs: string[]
 }
 
 interface SiteRow {
@@ -41,6 +42,7 @@ interface SiteRow {
   deliveryArea: string
   deliveryHours: string
   socials: SocialRow[]
+  deliverySuburbs: string[]
 }
 
 function rowToForm(r: SiteRow): BrandForm {
@@ -61,6 +63,7 @@ function rowToForm(r: SiteRow): BrandForm {
     area: r.deliveryArea,
     hours: r.deliveryHours,
     socials: r.socials.length ? r.socials : [{ label: '', href: '' }],
+    deliverySuburbs: r.deliverySuburbs,
   }
 }
 
@@ -83,6 +86,7 @@ function formToInput(f: BrandForm) {
     },
     delivery: { area: f.area, hours: f.hours },
     socials: f.socials.filter((s) => s.label && s.href),
+    deliverySuburbs: f.deliverySuburbs,
   }
 }
 

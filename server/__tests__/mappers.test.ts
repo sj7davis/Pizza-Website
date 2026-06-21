@@ -29,6 +29,7 @@ describe('mappers', () => {
         storyPullquote: 'q', storyEstablished: 'est',
         deliveryArea: 'Airport West', deliveryHours: '5-9pm',
         socials: [{ label: 'Instagram', href: '#ig' }],
+        deliverySuburbs: ['Airport West'],
       },
       [{ name: 'Margherita', tagline: 't', description: 'd', price: '$22', image: null, tags: [] }],
     )

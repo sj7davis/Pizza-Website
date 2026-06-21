@@ -39,7 +39,21 @@ model SiteContent {
   deliveryArea     String
   deliveryHours    String
   socials          Json
+  deliverySuburbs  String[] @default([])
   updatedAt        DateTime @updatedAt
+}
+
+model EmailSignup {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  source    String   @default("site")
+  createdAt DateTime @default(now())
+}
+
+model OrderClick {
+  id        String   @id @default(cuid())
+  platform  String
+  createdAt DateTime @default(now())
 }
 
 model AdminUser {

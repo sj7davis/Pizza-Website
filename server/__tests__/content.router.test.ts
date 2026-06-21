@@ -13,6 +13,7 @@ function makeDb() {
         storyPullquote: 'q', storyEstablished: 'est',
         deliveryArea: 'Airport West', deliveryHours: '5-9pm',
         socials: [{ label: 'Instagram', href: '#ig' }],
+        deliverySuburbs: ['Airport West'],
       }),
     },
     menuItem: {

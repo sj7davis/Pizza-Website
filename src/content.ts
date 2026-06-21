@@ -62,4 +62,5 @@ export const content: SiteContent = {
   socials: [
     { label: 'Instagram', href: '#' },
   ],
+  deliverySuburbs: ['Airport West', 'Niddrie', 'Essendon', 'Keilor East', 'Strathmore', 'Avondale Heights', 'Aberfeldie', 'Moonee Ponds'],
 }

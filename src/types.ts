@@ -47,4 +47,5 @@ export interface SiteContent {
   menu: MenuItem[]
   delivery: { area: string; hours: string }
   socials: SocialLink[]
+  deliverySuburbs: string[]
 }

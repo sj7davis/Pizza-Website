@@ -1,5 +1,5 @@
 import type { SiteContent, MenuItem } from '../shared/contract'
-import { paragraphsSchema, socialsSchema, orderLinksSchema } from './validation'
+import { paragraphsSchema, socialsSchema, orderLinksSchema, suburbsSchema } from './validation'
 
 export interface MenuItemRow {
   name: string
@@ -27,6 +27,7 @@ export interface SiteContentRow {
   deliveryArea: string
   deliveryHours: string
   socials: unknown
+  deliverySuburbs: unknown
 }
 
 export function rowToMenuItem(row: MenuItemRow): MenuItem {
@@ -61,5 +62,6 @@ export function rowsToSiteContent(site: SiteContentRow, menuRows: MenuItemRow[])
     menu: menuRows.map(rowToMenuItem),
     delivery: { area: site.deliveryArea, hours: site.deliveryHours },
     socials: socialsSchema.parse(site.socials),
+    deliverySuburbs: suburbsSchema.parse(site.deliverySuburbs),
   }
 }

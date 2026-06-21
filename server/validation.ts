@@ -36,10 +36,12 @@ export const siteUpdateInput = z.object({
   }),
   delivery: z.object({ area: z.string().min(1), hours: z.string().min(1) }),
   socials: z.array(socialLinkSchema),
+  deliverySuburbs: z.array(z.string()),
 })
 
 export const paragraphsSchema = z.array(z.string())
 export const socialsSchema = z.array(socialLinkSchema)
+export const suburbsSchema = z.array(z.string())
 
 export const changePasswordInput = z.object({
   currentPassword: z.string().min(1),
