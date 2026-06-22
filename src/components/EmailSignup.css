@@ -1,0 +1,6 @@
+.email-signup { display: flex; flex-direction: column; gap: 8px; max-width: 420px; }
+.email-signup__label { font-family: var(--font-ui); font-size: 12px; letter-spacing: 1px; color: var(--muted); }
+.email-signup__row { display: flex; gap: 8px; }
+.email-signup input { flex: 1; padding: 11px 12px; border: 1px solid var(--hairline); border-radius: 2px; font: inherit; background: var(--paper); }
+.email-signup button { padding: 11px 18px; border: none; background: var(--ink); color: var(--paper); border-radius: 2px; font-family: var(--font-ui); font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; }
+.email-signup__done { font-family: var(--font-italic); font-style: italic; color: var(--gold); }

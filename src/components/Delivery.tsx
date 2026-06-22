@@ -1,12 +1,14 @@
 import { Reveal } from './Reveal'
+import { DeliveryChecker } from './DeliveryChecker'
 import './Delivery.css'
 
 interface DeliveryProps {
   area: string
   hours: string
+  suburbs: string[]
 }
 
-export function Delivery({ area, hours }: DeliveryProps) {
+export function Delivery({ area, hours, suburbs }: DeliveryProps) {
   return (
     <section className="delivery" id="delivery">
       <div className="container delivery__grid">
@@ -22,6 +24,9 @@ export function Delivery({ area, hours }: DeliveryProps) {
             <p className="delivery__value">{hours}</p>
           </div>
         </Reveal>
+      </div>
+      <div className="container">
+        <DeliveryChecker suburbs={suburbs} />
       </div>
     </section>
   )

@@ -23,7 +23,7 @@ export default function App() {
       />
       <Menu items={content.menu} />
       <Story story={content.story} />
-      <Delivery area={content.delivery.area} hours={content.delivery.hours} />
+      <Delivery area={content.delivery.area} hours={content.delivery.hours} suburbs={content.deliverySuburbs} />
       <Footer
         brandName={content.brandName}
         orderLinks={content.orderLinks}
