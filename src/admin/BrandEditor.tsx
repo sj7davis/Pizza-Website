@@ -166,6 +166,13 @@ export function BrandEditor() {
       <label>Established line<input value={data.established} onChange={(e) => set('established', e.target.value)} /></label>
       <label>Delivery area<input value={data.area} onChange={(e) => set('area', e.target.value)} /></label>
       <label>Delivery hours (display text)<input value={data.hours} onChange={(e) => set('hours', e.target.value)} /></label>
+      <label>Delivery suburbs (one per line — used by the "Do we deliver to you?" checker)
+        <textarea
+          value={data.deliverySuburbs.join('\n')}
+          onChange={(e) => set('deliverySuburbs', e.target.value.split('\n').map((s) => s.trim()).filter(Boolean))}
+          aria-label="delivery suburbs"
+        />
+      </label>
 
       {data.socials.map((s, i) => (
         <div className="admin-actions" key={i}>
