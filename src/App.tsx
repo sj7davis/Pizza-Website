@@ -20,6 +20,7 @@ export default function App() {
         orderLinks={content.orderLinks}
         ordersDisabled={ordersDisabled}
         status={status}
+        heroImage={content.heroImage}
       />
       <Menu items={content.menu} />
       <Story story={content.story} />

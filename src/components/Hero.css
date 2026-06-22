@@ -6,12 +6,11 @@
   align-items: center;
   overflow: hidden;
 }
-/* Optional Backhaus dough photo behind the logo: a cinematic dark treatment so the
-   photo reads clearly while the (now light) logo + text stay legible. Toggled by
-   HERO_PHOTO_BG in Hero.tsx — set it false to return to the plain off-white hero. */
+/* Dough photo behind the hero logo: a cinematic dark treatment so the photo reads
+   clearly while the (now light) logo + text stay legible. The background-image is
+   set via inline style in Hero.tsx (driven by the heroImage field in SiteContent). */
 .hero--photo {
   background-color: var(--ink);
-  background-image: linear-gradient(rgba(18, 17, 13, 0.5), rgba(18, 17, 13, 0.7)), url('/dough.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

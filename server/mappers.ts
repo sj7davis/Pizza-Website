@@ -28,6 +28,7 @@ export interface SiteContentRow {
   deliveryHours: string
   socials: unknown
   deliverySuburbs: unknown
+  heroImage: string
 }
 
 export function rowToMenuItem(row: MenuItemRow): MenuItem {
@@ -63,5 +64,6 @@ export function rowsToSiteContent(site: SiteContentRow, menuRows: MenuItemRow[])
     delivery: { area: site.deliveryArea, hours: site.deliveryHours },
     socials: socialsSchema.parse(site.socials),
     deliverySuburbs: suburbsSchema.parse(site.deliverySuburbs),
+    heroImage: site.heroImage,
   }
 }

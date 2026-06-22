@@ -14,6 +14,7 @@ function makeDb() {
         deliveryArea: 'Airport West', deliveryHours: '5-9pm',
         socials: [{ label: 'Instagram', href: '#ig' }],
         deliverySuburbs: ['Airport West'],
+        heroImage: '/dough.jpg',
       }),
     },
     menuItem: {

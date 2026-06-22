@@ -2,6 +2,7 @@ import { useState, type FormEvent } from 'react'
 import { trpc } from '../lib/trpc'
 import { SaveStatus, type SaveState } from './SaveStatus'
 import { MELBOURNE_SUBURBS } from './suburbsData'
+import { ImageUploadField } from './ImageUploadField'
 
 interface SocialRow { label: string; href: string }
 interface OrderRow { label: string; url: string }
@@ -24,6 +25,7 @@ interface BrandForm {
   hours: string
   socials: SocialRow[]
   deliverySuburbs: string[]
+  heroImage: string
 }
 
 interface SiteRow {
@@ -44,6 +46,7 @@ interface SiteRow {
   deliveryHours: string
   socials: SocialRow[]
   deliverySuburbs: string[]
+  heroImage: string
 }
 
 function rowToForm(r: SiteRow): BrandForm {
@@ -65,6 +68,7 @@ function rowToForm(r: SiteRow): BrandForm {
     hours: r.deliveryHours,
     socials: r.socials.length ? r.socials : [{ label: '', href: '' }],
     deliverySuburbs: r.deliverySuburbs,
+    heroImage: r.heroImage,
   }
 }
 
@@ -88,6 +92,7 @@ function formToInput(f: BrandForm) {
     delivery: { area: f.area, hours: f.hours },
     socials: f.socials.filter((s) => s.label && s.href),
     deliverySuburbs: f.deliverySuburbs,
+    heroImage: f.heroImage,
   }
 }
 
@@ -147,6 +152,8 @@ export function BrandEditor() {
       <h2>Brand</h2>
       <label>Brand name<input value={data.brandName} onChange={(e) => set('brandName', e.target.value)} /></label>
       <label>Hero tagline<input value={data.tagline} onChange={(e) => set('tagline', e.target.value)} /></label>
+      <label>Hero background photo</label>
+      <ImageUploadField value={data.heroImage || null} onChange={(url) => set('heroImage', url ?? '/dough.jpg')} />
 
       <fieldset className="admin-fieldset">
         <legend>Order links</legend>

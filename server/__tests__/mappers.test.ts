@@ -30,6 +30,7 @@ describe('mappers', () => {
         deliveryArea: 'Airport West', deliveryHours: '5-9pm',
         socials: [{ label: 'Instagram', href: '#ig' }],
         deliverySuburbs: ['Airport West'],
+        heroImage: '/dough.jpg',
       },
       [{ name: 'Margherita', tagline: 't', description: 'd', price: '$22', image: null, tags: [] }],
     )

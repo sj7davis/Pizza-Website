@@ -10,6 +10,7 @@ const validInput = {
   delivery: { area: 'Airport West', hours: '5-9pm' },
   socials: [{ label: 'Instagram', href: '#ig' }],
   deliverySuburbs: ['Airport West'],
+  heroImage: '/dough.jpg',
 }
 
 function caller(db: unknown, user: { id: string; email: string } | null = { id: 'u1', email: 'a@b.c' }) {
