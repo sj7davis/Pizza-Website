@@ -25,6 +25,7 @@ function toColumns(input: z.infer<typeof siteUpdateInput>) {
     promoActive: input.promoActive,
     promoText: input.promoText,
     promoCode: input.promoCode,
+    theme: input.theme,
   }
 }
 

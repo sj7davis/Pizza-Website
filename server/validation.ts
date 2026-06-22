@@ -42,6 +42,7 @@ export const siteUpdateInput = z.object({
   promoActive: z.boolean(),
   promoText: z.string().max(160),
   promoCode: z.string().max(40),
+  theme: z.enum(['editorial-dark', 'light-minimal', 'bold-trattoria']),
 })
 
 export const paragraphsSchema = z.array(z.string())
@@ -70,5 +71,7 @@ export const galleryUpdateInput = z.object({
   url: z.string().min(1),
   caption: z.string().max(200),
 })
+
+export const themeIdSchema = z.enum(['editorial-dark', 'light-minimal', 'bold-trattoria'])
 
 export const galleryReorderInput = z.object({ ids: z.array(z.string()) })

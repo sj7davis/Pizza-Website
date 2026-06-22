@@ -3,6 +3,7 @@ import { trpc } from '../lib/trpc'
 import { SaveStatus, type SaveState } from './SaveStatus'
 import { MELBOURNE_SUBURBS } from './suburbsData'
 import { ImageUploadField } from './ImageUploadField'
+import { THEMES, type ThemeId } from '../lib/themes'
 
 interface SocialRow { label: string; href: string }
 interface OrderRow { label: string; url: string }
@@ -29,6 +30,7 @@ interface BrandForm {
   promoActive: boolean
   promoText: string
   promoCode: string
+  theme: ThemeId
 }
 
 interface SiteRow {
@@ -53,6 +55,7 @@ interface SiteRow {
   promoActive: boolean
   promoText: string
   promoCode: string
+  theme: string
 }
 
 function rowToForm(r: SiteRow): BrandForm {
@@ -78,6 +81,7 @@ function rowToForm(r: SiteRow): BrandForm {
     promoActive: r.promoActive,
     promoText: r.promoText,
     promoCode: r.promoCode,
+    theme: (r.theme as ThemeId) ?? 'editorial-dark',
   }
 }
 
@@ -105,6 +109,7 @@ function formToInput(f: BrandForm) {
     promoActive: f.promoActive,
     promoText: f.promoText,
     promoCode: f.promoCode,
+    theme: f.theme,
   }
 }
 
@@ -167,6 +172,24 @@ export function BrandEditor() {
       <label>Hero background photo</label>
       <ImageUploadField value={data.heroImage || null} onChange={(url) => set('heroImage', url ?? '/dough.jpg')} />
 
+      <fieldset className="admin-fieldset" aria-label="site theme selector">
+        <legend>Site theme</legend>
+        <p className="admin-muted">Choose the overall colour palette for the public site.</p>
+        {THEMES.map((t) => (
+          <label key={t.id} className="admin-check" aria-label={`Theme: ${t.label}`}>
+            <input
+              type="radio"
+              name="site-theme"
+              value={t.id}
+              checked={data.theme === t.id}
+              onChange={() => set('theme', t.id)}
+              aria-label={t.label}
+            />
+            <strong>{t.label}</strong> — {t.description}
+          </label>
+        ))}
+      </fieldset>
+
       <fieldset className="admin-fieldset">
         <legend>Order links</legend>
         {data.orderLinks.map((l, i) => (
@@ -199,13 +222,21 @@ export function BrandEditor() {
       <label>Delivery hours (display text)<input value={data.hours} onChange={(e) => set('hours', e.target.value)} /></label>
       <fieldset className="admin-fieldset">
         <legend>Delivery suburbs</legend>
-        <p className="admin-muted">Used by the "Do we deliver to you?" checker. Start typing to pick a suburb, or type your own.</p>
+        <p className="admin-muted">Used by the "Do we deliver to you?" checker. Start typing to add a suburb; click ✕ on a tag to remove it. Remember to press <strong>Save</strong> after changes.</p>
         {data.deliverySuburbs.length > 0 && (
           <ul className="admin-chips" aria-label="delivery suburbs">
             {data.deliverySuburbs.map((s, i) => (
               <li className="admin-chip" key={s}>
-                {s}
-                <button type="button" onClick={() => removeSuburb(i)} aria-label={`Remove ${s}`}>✕</button>
+                <span>{s}</span>
+                <button
+                  type="button"
+                  className="admin-chip__remove"
+                  onClick={() => removeSuburb(i)}
+                  aria-label={`Remove ${s}`}
+                  title={`Remove ${s}`}
+                >
+                  ✕
+                </button>
               </li>
             ))}
           </ul>

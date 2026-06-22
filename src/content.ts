@@ -68,4 +68,5 @@ export const content: SiteContent = {
   promoActive: false,
   promoText: '',
   promoCode: '',
+  theme: 'editorial-dark' as const,
 }

@@ -40,6 +40,7 @@ describe('mappers', () => {
         deliverySuburbs: ['Airport West'],
         heroImage: '/dough.jpg',
         promoActive: false, promoText: '', promoCode: '',
+        theme: 'editorial-dark',
       },
       [{ name: 'Margherita', tagline: 't', description: 'd', price: '$22', image: null, tags: [], featured: false }],
     )
@@ -60,11 +61,30 @@ describe('mappers', () => {
         deliveryArea: 'Airport West', deliveryHours: '5-9pm',
         socials: [], deliverySuburbs: [], heroImage: '/dough.jpg',
         promoActive: true, promoText: 'Free delivery!', promoCode: 'FIRSTBITE',
+        theme: 'editorial-dark',
       },
       [],
     )
     expect(site.promoActive).toBe(true)
     expect(site.promoText).toBe('Free delivery!')
     expect(site.promoCode).toBe('FIRSTBITE')
+  })
+
+  it('rowsToSiteContent maps theme field', () => {
+    const site = rowsToSiteContent(
+      {
+        brandName: 'PBV', tagline: 'tag',
+        orderLinks: [], openTime: '17:00', closeTime: '21:00', timezone: 'UTC',
+        soldOut: false, soldOutMessage: 'x',
+        storyEyebrow: 'e', storyHeading: 'h', storyParagraphs: ['p'],
+        storyPullquote: 'q', storyEstablished: 'est',
+        deliveryArea: 'a', deliveryHours: 'h',
+        socials: [], deliverySuburbs: [], heroImage: '/dough.jpg',
+        promoActive: false, promoText: '', promoCode: '',
+        theme: 'light-minimal',
+      },
+      [],
+    )
+    expect(site.theme).toBe('light-minimal')
   })
 })
