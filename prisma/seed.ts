@@ -12,9 +12,16 @@ const prisma = new PrismaClient()
  */
 async function main() {
   // First owner: created from env ONLY if it doesn't exist yet. After that the
-  // password is managed in the admin (Account tab) and must NOT be reset on deploy.
+  // password is managed in the admin (Account tab) and is NOT reset on deploy — so
+  // admin password changes survive redeploys.
+  //
+  // Recovery: if you're locked out, set ADMIN_PASSWORD to a known value and set
+  // ADMIN_PASSWORD_RESET=true on the service, then redeploy. The owner's password is
+  // reset to ADMIN_PASSWORD once. REMOVE ADMIN_PASSWORD_RESET afterwards so future
+  // deploys don't keep resetting it.
   const adminEmail = process.env.ADMIN_EMAIL?.trim()
   const adminPassword = process.env.ADMIN_PASSWORD
+  const forceReset = process.env.ADMIN_PASSWORD_RESET === 'true'
   if (adminEmail && adminPassword) {
     const existing = await prisma.adminUser.findUnique({ where: { email: adminEmail } })
     if (!existing) {
@@ -23,6 +30,13 @@ async function main() {
       })
       // eslint-disable-next-line no-console
       console.log(`Owner account created: ${adminEmail}`)
+    } else if (forceReset) {
+      await prisma.adminUser.update({
+        where: { email: adminEmail },
+        data: { passwordHash: await hashPassword(adminPassword) },
+      })
+      // eslint-disable-next-line no-console
+      console.log(`Owner password reset from ADMIN_PASSWORD: ${adminEmail}`)
     }
   }
 
