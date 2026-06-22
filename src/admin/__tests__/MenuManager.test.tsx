@@ -24,8 +24,8 @@ import { MenuManager } from '../MenuManager'
 
 beforeEach(() => {
   listState.data = [
-    { id: '1', name: 'Margherita', tagline: 't', description: 'd', price: '$22', image: null, available: true },
-    { id: '2', name: 'Nduja', tagline: 't', description: 'd', price: '$26', image: null, available: false },
+    { id: '1', name: 'Margherita', tagline: 't', description: 'd', price: '$22', image: null, available: true, featured: false },
+    { id: '2', name: 'Nduja', tagline: 't', description: 'd', price: '$26', image: null, available: false, featured: true },
   ]
   createMutate.mockClear()
   deleteMutate.mockClear()

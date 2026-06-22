@@ -8,6 +8,7 @@ export interface MenuItemRow {
   price: string
   image: string | null
   tags: string[]
+  featured: boolean
 }
 
 export interface SiteContentRow {
@@ -29,6 +30,9 @@ export interface SiteContentRow {
   socials: unknown
   deliverySuburbs: unknown
   heroImage: string
+  promoActive: boolean
+  promoText: string
+  promoCode: string
 }
 
 export function rowToMenuItem(row: MenuItemRow): MenuItem {
@@ -40,6 +44,7 @@ export function rowToMenuItem(row: MenuItemRow): MenuItem {
   }
   if (row.image) item.image = row.image
   if (row.tags?.length) item.tags = row.tags
+  if (row.featured) item.featured = true
   return item
 }
 
@@ -65,5 +70,8 @@ export function rowsToSiteContent(site: SiteContentRow, menuRows: MenuItemRow[])
     socials: socialsSchema.parse(site.socials),
     deliverySuburbs: suburbsSchema.parse(site.deliverySuburbs),
     heroImage: site.heroImage,
+    promoActive: site.promoActive,
+    promoText: site.promoText,
+    promoCode: site.promoCode,
   }
 }

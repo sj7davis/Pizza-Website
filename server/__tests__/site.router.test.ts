@@ -11,6 +11,7 @@ const validInput = {
   socials: [{ label: 'Instagram', href: '#ig' }],
   deliverySuburbs: ['Airport West'],
   heroImage: '/dough.jpg',
+  promoActive: false, promoText: '', promoCode: '',
 }
 
 function caller(db: unknown, user: { id: string; email: string } | null = { id: 'u1', email: 'a@b.c' }) {
@@ -37,5 +38,18 @@ describe('site router', () => {
     await expect(
       caller({ siteContent: { upsert: vi.fn() } }).site.update({ ...validInput, brandName: '' }),
     ).rejects.toThrow()
+  })
+
+  it('update round-trips promo fields', async () => {
+    const upsert = vi.fn().mockResolvedValue({ id: 1 })
+    await caller({ siteContent: { upsert } }).site.update({
+      ...validInput,
+      promoActive: true, promoText: 'Free delivery this weekend!', promoCode: 'FIRSTBITE',
+    })
+    const arg = upsert.mock.calls[0][0]
+    expect(arg.create.promoActive).toBe(true)
+    expect(arg.create.promoText).toBe('Free delivery this weekend!')
+    expect(arg.create.promoCode).toBe('FIRSTBITE')
+    expect(arg.update.promoActive).toBe(true)
   })
 })

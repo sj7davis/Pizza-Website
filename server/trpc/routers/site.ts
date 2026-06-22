@@ -22,6 +22,9 @@ function toColumns(input: z.infer<typeof siteUpdateInput>) {
     socials: input.socials,
     deliverySuburbs: input.deliverySuburbs,
     heroImage: input.heroImage,
+    promoActive: input.promoActive,
+    promoText: input.promoText,
+    promoCode: input.promoCode,
   }
 }
 

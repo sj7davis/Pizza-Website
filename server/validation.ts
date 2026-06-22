@@ -7,6 +7,7 @@ export const menuItemInput = z.object({
   price: z.string().min(1),
   image: z.string().nullable().optional(),
   tags: z.array(z.string()).optional(),
+  featured: z.boolean().optional().default(false),
   available: z.boolean().optional(),
   sortOrder: z.number().int().optional(),
 })
@@ -38,6 +39,9 @@ export const siteUpdateInput = z.object({
   socials: z.array(socialLinkSchema),
   deliverySuburbs: z.array(z.string()),
   heroImage: z.string().min(1),
+  promoActive: z.boolean(),
+  promoText: z.string().max(160),
+  promoCode: z.string().max(40),
 })
 
 export const paragraphsSchema = z.array(z.string())

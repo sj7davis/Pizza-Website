@@ -1,5 +1,6 @@
 import { useContent } from './lib/useContent'
 import { useOpenStatus } from './lib/useOpenStatus'
+import { PromoBanner } from './components/PromoBanner'
 import { StatusBanner } from './components/StatusBanner'
 import { Hero } from './components/Hero'
 import { Menu } from './components/Menu'
@@ -14,6 +15,7 @@ export default function App() {
   const ordersDisabled = status.state !== 'open'
   return (
     <>
+      <PromoBanner />
       <StatusBanner status={status} />
       <Hero
         brandName={content.brandName}

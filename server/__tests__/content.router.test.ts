@@ -15,11 +15,12 @@ function makeDb() {
         socials: [{ label: 'Instagram', href: '#ig' }],
         deliverySuburbs: ['Airport West'],
         heroImage: '/dough.jpg',
+        promoActive: false, promoText: '', promoCode: '',
       }),
     },
     menuItem: {
       findMany: vi.fn().mockResolvedValue([
-        { name: 'Margherita', tagline: 't', description: 'd', price: '$22', image: null },
+        { name: 'Margherita', tagline: 't', description: 'd', price: '$22', image: null, featured: false },
       ]),
     },
   }

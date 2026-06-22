@@ -26,6 +26,9 @@ interface BrandForm {
   socials: SocialRow[]
   deliverySuburbs: string[]
   heroImage: string
+  promoActive: boolean
+  promoText: string
+  promoCode: string
 }
 
 interface SiteRow {
@@ -47,6 +50,9 @@ interface SiteRow {
   socials: SocialRow[]
   deliverySuburbs: string[]
   heroImage: string
+  promoActive: boolean
+  promoText: string
+  promoCode: string
 }
 
 function rowToForm(r: SiteRow): BrandForm {
@@ -69,6 +75,9 @@ function rowToForm(r: SiteRow): BrandForm {
     socials: r.socials.length ? r.socials : [{ label: '', href: '' }],
     deliverySuburbs: r.deliverySuburbs,
     heroImage: r.heroImage,
+    promoActive: r.promoActive,
+    promoText: r.promoText,
+    promoCode: r.promoCode,
   }
 }
 
@@ -93,6 +102,9 @@ function formToInput(f: BrandForm) {
     socials: f.socials.filter((s) => s.label && s.href),
     deliverySuburbs: f.deliverySuburbs,
     heroImage: f.heroImage,
+    promoActive: f.promoActive,
+    promoText: f.promoText,
+    promoCode: f.promoCode,
   }
 }
 
@@ -219,6 +231,13 @@ export function BrandEditor() {
             ))}
           </datalist>
         </div>
+      </fieldset>
+
+      <fieldset className="admin-fieldset">
+        <legend>Promotions</legend>
+        <label className="admin-check"><input type="checkbox" checked={data.promoActive} onChange={(e) => set('promoActive', e.target.checked)} /> Show promo banner</label>
+        <label>Banner message<input value={data.promoText} onChange={(e) => set('promoText', e.target.value)} maxLength={160} placeholder="e.g. Free delivery this weekend!" /></label>
+        <label>Promo code (optional)<input value={data.promoCode} onChange={(e) => set('promoCode', e.target.value)} maxLength={40} placeholder="e.g. FIRSTBITE" /></label>
       </fieldset>
 
       {data.socials.map((s, i) => (

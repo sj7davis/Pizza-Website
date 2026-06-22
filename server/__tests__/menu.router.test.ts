@@ -30,10 +30,24 @@ describe('menu router', () => {
     expect(create).toHaveBeenCalledWith({ data: expect.objectContaining({ name: 'Capricciosa', price: '$28' }) })
   })
 
+  it('create round-trips featured flag', async () => {
+    const create = vi.fn().mockResolvedValue({ id: 'feat' })
+    await withDb({ menuItem: { create } }).menu.create({
+      name: 'Nduja', tagline: 'heat', description: 'spicy', price: '$26', featured: true,
+    })
+    expect(create).toHaveBeenCalledWith({ data: expect.objectContaining({ featured: true }) })
+  })
+
   it('update writes the provided fields by id', async () => {
     const update = vi.fn().mockResolvedValue({ id: 'x' })
     await withDb({ menuItem: { update } }).menu.update({ id: 'x', price: '$30' })
-    expect(update).toHaveBeenCalledWith({ where: { id: 'x' }, data: { price: '$30' } })
+    expect(update).toHaveBeenCalledWith({ where: { id: 'x' }, data: expect.objectContaining({ price: '$30' }) })
+  })
+
+  it('update round-trips featured flag', async () => {
+    const update = vi.fn().mockResolvedValue({ id: 'x' })
+    await withDb({ menuItem: { update } }).menu.update({ id: 'x', featured: true })
+    expect(update).toHaveBeenCalledWith({ where: { id: 'x' }, data: { featured: true } })
   })
 
   it('delete removes by id', async () => {

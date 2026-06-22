@@ -64,6 +64,9 @@ async function main() {
         socials: content.socials as object,
         deliverySuburbs: content.deliverySuburbs,
         heroImage: content.heroImage,
+        promoActive: content.promoActive,
+        promoText: content.promoText,
+        promoCode: content.promoCode,
       },
     })
     // eslint-disable-next-line no-console
@@ -81,6 +84,7 @@ async function main() {
         price: m.price,
         image: m.image ?? null,
         tags: m.tags ?? [],
+        featured: m.featured ?? false,
         sortOrder: i,
         available: true,
       })),
