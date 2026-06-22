@@ -33,4 +33,14 @@ describe('MenuCard', () => {
     expect(screen.getByText('V')).toBeInTheDocument()
     expect(screen.getByText('🌶️')).toBeInTheDocument()
   })
+
+  it("renders the Tonight's Special badge when featured is true", () => {
+    render(<MenuCard item={{ ...base, featured: true }} />)
+    expect(screen.getByText("Tonight's Special")).toBeInTheDocument()
+  })
+
+  it('does not render the badge when featured is false or absent', () => {
+    render(<MenuCard item={base} />)
+    expect(screen.queryByText("Tonight's Special")).toBeNull()
+  })
 })

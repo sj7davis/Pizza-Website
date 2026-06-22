@@ -30,3 +30,21 @@
 .menu-card__desc { color: var(--ink-soft); font-size: 14px; line-height: 1.6; margin: 0; }
 .menu-card__tags { list-style: none; margin: 0 0 10px; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
 .menu-card__tag { font-family: var(--font-ui); font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: var(--ink-soft); border: 1px solid var(--hairline); border-radius: 999px; padding: 2px 9px; }
+
+/* Tonight's Special treatment */
+.menu-card--featured { border-color: var(--gold); }
+.menu-card__media { position: relative; }
+.menu-card__featured-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  font-family: var(--font-ui);
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--ink);
+  background: var(--gold);
+  border-radius: 2px;
+  padding: 3px 10px;
+  pointer-events: none;
+}

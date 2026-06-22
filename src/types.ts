@@ -9,6 +9,8 @@ export interface MenuItem {
   image?: string
   /** Optional dietary/spice tags, e.g. ['V'] or ['🌶️🌶️']. */
   tags?: string[]
+  /** When true this item is highlighted as tonight's special. */
+  featured?: boolean
 }
 
 export interface SocialLink {
@@ -55,4 +57,7 @@ export interface SiteContent {
   socials: SocialLink[]
   deliverySuburbs: string[]
   heroImage: string
+  promoActive: boolean
+  promoText: string
+  promoCode: string
 }

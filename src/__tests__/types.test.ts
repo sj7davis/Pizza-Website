@@ -22,6 +22,9 @@ describe('types', () => {
       socials: [{ label: 'IG', href: '#' }],
       deliverySuburbs: [],
       heroImage: '/dough.jpg',
+      promoActive: false,
+      promoText: '',
+      promoCode: '',
     }
     expect(sample.menu[0].name).toBe('X')
     expect(sample.story.paragraphs).toHaveLength(1)

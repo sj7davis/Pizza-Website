@@ -38,6 +38,7 @@ export const content: SiteContent = {
         'Spicy Calabrian nduja, fior di latte, a drizzle of hot honey and a scatter of oregano — sweet, fiery and balanced in every bite.',
       price: '$26',
       tags: ['🌶️🌶️'],
+      featured: true,
     },
     {
       name: 'Funghi',
@@ -64,4 +65,7 @@ export const content: SiteContent = {
   ],
   deliverySuburbs: ['Airport West', 'Niddrie', 'Essendon', 'Keilor East', 'Strathmore', 'Avondale Heights', 'Aberfeldie', 'Moonee Ponds'],
   heroImage: '/dough.jpg',
+  promoActive: false,
+  promoText: '',
+  promoCode: '',
 }

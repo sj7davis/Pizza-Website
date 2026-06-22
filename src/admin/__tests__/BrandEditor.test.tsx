@@ -30,6 +30,9 @@ beforeEach(() => {
     socials: [{ label: 'Instagram', href: '#ig' }],
     deliverySuburbs: ['Airport West'],
     heroImage: '/dough.jpg',
+    promoActive: false,
+    promoText: '',
+    promoCode: '',
   }
 })
 

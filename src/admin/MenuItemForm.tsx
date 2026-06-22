@@ -9,6 +9,7 @@ export interface MenuFormValues {
   image: string | null
   tags: string[]
   available: boolean
+  featured: boolean
 }
 
 export function MenuItemForm({
@@ -30,6 +31,7 @@ export function MenuItemForm({
     image: initial?.image ?? null,
     tags: initial?.tags ?? [],
     available: initial?.available ?? true,
+    featured: initial?.featured ?? false,
   })
 
   function set<K extends keyof MenuFormValues>(k: K, val: MenuFormValues[K]) {
@@ -55,6 +57,9 @@ export function MenuItemForm({
       </label>
       <label className="admin-check">
         <input type="checkbox" checked={v.available} onChange={(e) => set('available', e.target.checked)} /> Available
+      </label>
+      <label className="admin-check">
+        <input type="checkbox" checked={v.featured} onChange={(e) => set('featured', e.target.checked)} /> Feature as tonight's special
       </label>
       <div className="admin-actions">
         <button type="submit" disabled={submitting}>Save</button>
