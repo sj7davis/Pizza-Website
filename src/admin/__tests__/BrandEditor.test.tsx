@@ -60,4 +60,17 @@ describe('BrandEditor', () => {
     fireEvent.click(screen.getByRole('button', { name: /^save$/i }))
     expect(await screen.findByRole('alert')).toHaveTextContent(/could not save/i)
   })
+
+  it('adds a delivery suburb as a chip and saves it', async () => {
+    render(<BrandEditor />)
+    expect(screen.getByText('Airport West')).toBeInTheDocument() // existing chip
+    fireEvent.change(screen.getByLabelText(/add delivery suburb/i), { target: { value: 'Niddrie' } })
+    fireEvent.click(screen.getByRole('button', { name: /^add$/i }))
+    expect(screen.getByText('Niddrie')).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: /^save$/i }))
+    await waitFor(() => expect(updateMutate).toHaveBeenCalled())
+    expect(updateMutate.mock.calls[0][0].deliverySuburbs).toEqual(
+      expect.arrayContaining(['Airport West', 'Niddrie']),
+    )
+  })
 })
