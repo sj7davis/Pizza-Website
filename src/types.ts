@@ -30,6 +30,12 @@ export interface OrderLink {
   url: string
 }
 
+export interface GalleryImage {
+  id: string
+  url: string
+  caption: string
+}
+
 export interface SiteContent {
   brandName: string
   tagline: string

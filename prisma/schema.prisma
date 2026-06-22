@@ -57,6 +57,14 @@ model OrderClick {
   createdAt DateTime @default(now())
 }
 
+model GalleryImage {
+  id        String   @id @default(cuid())
+  url       String
+  caption   String   @default("")
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+}
+
 model AdminUser {
   id           String    @id @default(cuid())
   email        String    @unique
