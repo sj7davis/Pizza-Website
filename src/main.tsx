@@ -1,3 +1,4 @@
+import { registerSW } from 'virtual:pwa-register'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
@@ -8,6 +9,10 @@ import { trpc } from './lib/trpc'
 import App from './App'
 import { AdminApp } from './admin/AdminApp'
 import './theme.css'
+
+if (import.meta.env.PROD) {
+  registerSW({ immediate: true })
+}
 
 const queryClient = new QueryClient()
 const trpcClient = trpc.createClient({
