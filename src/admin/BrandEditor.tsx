@@ -222,13 +222,21 @@ export function BrandEditor() {
       <label>Delivery hours (display text)<input value={data.hours} onChange={(e) => set('hours', e.target.value)} /></label>
       <fieldset className="admin-fieldset">
         <legend>Delivery suburbs</legend>
-        <p className="admin-muted">Used by the "Do we deliver to you?" checker. Start typing to pick a suburb, or type your own.</p>
+        <p className="admin-muted">Used by the "Do we deliver to you?" checker. Start typing to add a suburb; click ✕ on a tag to remove it. Remember to press <strong>Save</strong> after changes.</p>
         {data.deliverySuburbs.length > 0 && (
           <ul className="admin-chips" aria-label="delivery suburbs">
             {data.deliverySuburbs.map((s, i) => (
               <li className="admin-chip" key={s}>
-                {s}
-                <button type="button" onClick={() => removeSuburb(i)} aria-label={`Remove ${s}`}>✕</button>
+                <span>{s}</span>
+                <button
+                  type="button"
+                  className="admin-chip__remove"
+                  onClick={() => removeSuburb(i)}
+                  aria-label={`Remove ${s}`}
+                  title={`Remove ${s}`}
+                >
+                  ✕
+                </button>
               </li>
             ))}
           </ul>
