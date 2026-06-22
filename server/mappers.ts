@@ -1,5 +1,5 @@
 import type { SiteContent, MenuItem } from '../shared/contract'
-import { paragraphsSchema, socialsSchema, orderLinksSchema } from './validation'
+import { paragraphsSchema, socialsSchema, orderLinksSchema, suburbsSchema } from './validation'
 
 export interface MenuItemRow {
   name: string
@@ -7,6 +7,7 @@ export interface MenuItemRow {
   description: string
   price: string
   image: string | null
+  tags: string[]
 }
 
 export interface SiteContentRow {
@@ -26,6 +27,7 @@ export interface SiteContentRow {
   deliveryArea: string
   deliveryHours: string
   socials: unknown
+  deliverySuburbs: unknown
 }
 
 export function rowToMenuItem(row: MenuItemRow): MenuItem {
@@ -36,6 +38,7 @@ export function rowToMenuItem(row: MenuItemRow): MenuItem {
     price: row.price,
   }
   if (row.image) item.image = row.image
+  if (row.tags?.length) item.tags = row.tags
   return item
 }
 
@@ -59,5 +62,6 @@ export function rowsToSiteContent(site: SiteContentRow, menuRows: MenuItemRow[])
     menu: menuRows.map(rowToMenuItem),
     delivery: { area: site.deliveryArea, hours: site.deliveryHours },
     socials: socialsSchema.parse(site.socials),
+    deliverySuburbs: suburbsSchema.parse(site.deliverySuburbs),
   }
 }

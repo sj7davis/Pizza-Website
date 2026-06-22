@@ -5,9 +5,10 @@ interface OrderButtonProps {
   url: string
   variant?: 'solid' | 'ghost'
   disabled?: boolean
+  onOrder?: () => void
 }
 
-export function OrderButton({ label, url, variant = 'solid', disabled = false }: OrderButtonProps) {
+export function OrderButton({ label, url, variant = 'solid', disabled = false, onOrder }: OrderButtonProps) {
   if (disabled) {
     return (
       <span className={`order-btn order-btn--${variant} order-btn--disabled`} aria-disabled="true">
@@ -16,7 +17,7 @@ export function OrderButton({ label, url, variant = 'solid', disabled = false }:
     )
   }
   return (
-    <a className={`order-btn order-btn--${variant}`} href={url} target="_blank" rel="noopener noreferrer">
+    <a className={`order-btn order-btn--${variant}`} href={url} target="_blank" rel="noopener noreferrer" onClick={() => onOrder?.()}>
       {label}
       <span className="order-btn__arrow foil" aria-hidden="true">→</span>
     </a>

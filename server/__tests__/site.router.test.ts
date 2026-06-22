@@ -9,6 +9,7 @@ const validInput = {
   story: { eyebrow: 'Our story', heading: 'h', paragraphs: ['p1', 'p2'], pullquote: 'q', established: 'est' },
   delivery: { area: 'Airport West', hours: '5-9pm' },
   socials: [{ label: 'Instagram', href: '#ig' }],
+  deliverySuburbs: ['Airport West'],
 }
 
 function caller(db: unknown, user: { id: string; email: string } | null = { id: 'u1', email: 'a@b.c' }) {

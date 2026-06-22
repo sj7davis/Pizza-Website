@@ -29,6 +29,7 @@ export const content: SiteContent = {
       description:
         'San Marzano tomatoes, fior di latte, fresh basil and a thread of extra-virgin olive oil over our 48-hour Backhaus sourdough base. Simple, blistered, honest.',
       price: '$22',
+      tags: ['V'],
     },
     {
       name: 'Nduja',
@@ -36,6 +37,7 @@ export const content: SiteContent = {
       description:
         'Spicy Calabrian nduja, fior di latte, a drizzle of hot honey and a scatter of oregano — sweet, fiery and balanced in every bite.',
       price: '$26',
+      tags: ['🌶️🌶️'],
     },
     {
       name: 'Funghi',
@@ -60,4 +62,5 @@ export const content: SiteContent = {
   socials: [
     { label: 'Instagram', href: '#' },
   ],
+  deliverySuburbs: ['Airport West', 'Niddrie', 'Essendon', 'Keilor East', 'Strathmore', 'Avondale Heights', 'Aberfeldie', 'Moonee Ponds'],
 }

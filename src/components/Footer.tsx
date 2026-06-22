@@ -1,5 +1,7 @@
 import { Logo } from './Logo'
 import { OrderButton } from './OrderButton'
+import { EmailSignup } from './EmailSignup'
+import { trpc } from '../lib/trpc'
 import type { SocialLink } from '../types'
 import './Footer.css'
 
@@ -10,6 +12,7 @@ interface FooterProps {
 }
 
 export function Footer({ brandName, orderLinks, socials }: FooterProps) {
+  const orderClick = trpc.analytics.orderClick.useMutation()
   return (
     <footer className="footer">
       <div className="container footer__inner">
@@ -17,12 +20,18 @@ export function Footer({ brandName, orderLinks, socials }: FooterProps) {
           <h2 className="footer__heading">Hungry yet?</h2>
           <div className="footer__orders">
             {orderLinks.map((link) => (
-              <OrderButton key={link.label} label={`Order on ${link.label}`} url={link.url} />
+              <OrderButton
+                key={link.label}
+                label={`Order on ${link.label}`}
+                url={link.url}
+                onOrder={() => orderClick.mutate({ platform: link.label })}
+              />
             ))}
           </div>
         </div>
         <div className="footer__meta">
           <Logo text={brandName} />
+          <EmailSignup />
           <nav className="footer__socials">
             {socials.map((s) => (
               <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer">

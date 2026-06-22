@@ -1,0 +1,6 @@
+.delivery-checker { margin-top: 24px; max-width: 460px; }
+.delivery-checker__row { display: flex; gap: 8px; margin-top: 8px; }
+.delivery-checker input { flex: 1; padding: 11px 12px; border: 1px solid var(--hairline); border-radius: 2px; font: inherit; }
+.delivery-checker button { padding: 11px 18px; border: 1px solid var(--ink); background: transparent; color: var(--ink); border-radius: 2px; cursor: pointer; font-family: var(--font-ui); text-transform: uppercase; font-size: 12px; letter-spacing: 1.5px; }
+.delivery-checker__yes { font-family: var(--font-italic); font-style: italic; color: var(--gold); margin-top: 12px; }
+.delivery-checker__out { margin-top: 12px; display: flex; flex-direction: column; gap: 10px; }

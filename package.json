@@ -11,7 +11,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "dev:server": "tsx watch server/index.ts",
-    "start": "prisma db push --skip-generate --accept-data-loss && tsx prisma/seed.ts && tsx server/index.ts",
+    "start": "prisma db push --skip-generate && tsx prisma/seed.ts && tsx server/index.ts",
     "postinstall": "prisma generate",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
@@ -33,6 +33,8 @@
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
     "react-router-dom": "^7.18.0",
+    "resend": "^6.14.0",
+    "sharp": "^0.35.2",
     "superjson": "^2.2.6",
     "tsx": "^4.22.4",
     "zod": "^4.4.3"

@@ -16,7 +16,7 @@ describe('auth router', () => {
 
   it('login rejects bad credentials', async () => {
     const db = { adminUser: { findUnique: vi.fn().mockResolvedValue(null) } } as never
-    const c = { header: vi.fn() } as never
+    const c = { header: vi.fn(), req: { header: vi.fn() } } as never
     const caller = appRouter.createCaller({ db, c, user: null })
     await expect(caller.auth.login({ email: 'x@y.z', password: 'bad' }))
       .rejects.toMatchObject({ code: 'UNAUTHORIZED' })
@@ -29,7 +29,7 @@ describe('auth router', () => {
       adminUser: { findUnique: vi.fn().mockResolvedValue({ id: 'u1', email: 'a@b.c', passwordHash }) },
       session: { create },
     } as never
-    const c = { header: vi.fn() } as never
+    const c = { header: vi.fn(), req: { header: vi.fn() } } as never
     const resHeaders = new Headers()
     const caller = appRouter.createCaller({ db, c, user: null, resHeaders })
     const res = await caller.auth.login({ email: 'a@b.c', password: 'rightpass' })

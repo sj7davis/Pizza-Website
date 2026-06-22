@@ -6,6 +6,7 @@ export const menuItemInput = z.object({
   description: z.string().min(1),
   price: z.string().min(1),
   image: z.string().nullable().optional(),
+  tags: z.array(z.string()).optional(),
   available: z.boolean().optional(),
   sortOrder: z.number().int().optional(),
 })
@@ -35,7 +36,21 @@ export const siteUpdateInput = z.object({
   }),
   delivery: z.object({ area: z.string().min(1), hours: z.string().min(1) }),
   socials: z.array(socialLinkSchema),
+  deliverySuburbs: z.array(z.string()),
 })
 
 export const paragraphsSchema = z.array(z.string())
 export const socialsSchema = z.array(socialLinkSchema)
+export const suburbsSchema = z.array(z.string())
+
+export const changePasswordInput = z.object({
+  currentPassword: z.string().min(1),
+  newPassword: z.string().min(8),
+})
+export const addOwnerInput = z.object({
+  email: z.string().email({ pattern: /^[^@\s]+@[^@\s]+\.[^@\s]+$/ }),
+  password: z.string().min(8),
+})
+
+export const emailInput = z.object({ email: z.string().email({ pattern: /^[^@\s]+@[^@\s]+\.[^@\s]+$/ }) })
+export const orderClickInput = z.object({ platform: z.string().min(1).max(60) })

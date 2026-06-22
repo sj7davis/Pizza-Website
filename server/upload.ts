@@ -1,6 +1,6 @@
 import { mkdir, writeFile } from 'node:fs/promises'
 import { createHash } from 'node:crypto'
-import { extname, join } from 'node:path'
+import { join } from 'node:path'
 import type { Context as HonoContext } from 'hono'
 import { getCookie } from 'hono/cookie'
 import { prisma } from './db'
@@ -32,13 +32,21 @@ export async function handleUpload(c: HonoContext): Promise<Response> {
   const check = validateUpload(file.type, file.size)
   if (!check.ok) return c.json({ error: check.reason }, 400)
 
-  const buf = Buffer.from(await file.arrayBuffer())
-  const ext = ALLOWED[file.type] ?? extname(file.name) ?? '.bin'
-  const hash = createHash('sha256').update(buf).digest('hex').slice(0, 16)
+  const input = Buffer.from(await file.arrayBuffer())
+  let out: Buffer = input
+  let ext = ALLOWED[file.type] ?? '.bin'
+  try {
+    const sharp = (await import('sharp')).default
+    out = await sharp(input).rotate().resize({ width: 1600, withoutEnlargement: true }).webp({ quality: 80 }).toBuffer()
+    ext = '.webp'
+  } catch {
+    // sharp unavailable or unsupported input — fall back to the original bytes.
+  }
+  const hash = createHash('sha256').update(out).digest('hex').slice(0, 16)
   const filename = `${hash}${ext}`
 
   await mkdir(UPLOAD_DIR, { recursive: true })
-  await writeFile(join(UPLOAD_DIR, filename), buf)
+  await writeFile(join(UPLOAD_DIR, filename), out)
 
   return c.json({ url: `/uploads/${filename}` })
 }

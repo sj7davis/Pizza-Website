@@ -3,6 +3,7 @@ import { Logo } from './Logo'
 import { OrderButton } from './OrderButton'
 import { OrderStatus } from './OrderStatus'
 import type { OpenStatus } from '../lib/openStatus'
+import { trpc } from '../lib/trpc'
 import './Hero.css'
 
 interface HeroProps {
@@ -21,6 +22,7 @@ const HERO_PHOTO_BG = true
 
 export function Hero({ brandName, tagline, orderLinks, ordersDisabled, status }: HeroProps) {
   const reduce = useReducedMotion()
+  const orderClick = trpc.analytics.orderClick.useMutation()
   const step = (i: number) =>
     reduce
       ? {}
@@ -53,6 +55,7 @@ export function Hero({ brandName, tagline, orderLinks, ordersDisabled, status }:
               url={link.url}
               variant={i === 0 ? 'solid' : 'ghost'}
               disabled={ordersDisabled}
+              onOrder={() => orderClick.mutate({ platform: link.label })}
             />
           ))}
         </motion.div>

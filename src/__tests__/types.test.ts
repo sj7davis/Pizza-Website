@@ -20,6 +20,7 @@ describe('types', () => {
       menu: [item],
       delivery: { area: 'a', hours: 'h' },
       socials: [{ label: 'IG', href: '#' }],
+      deliverySuburbs: [],
     }
     expect(sample.menu[0].name).toBe('X')
     expect(sample.story.paragraphs).toHaveLength(1)
