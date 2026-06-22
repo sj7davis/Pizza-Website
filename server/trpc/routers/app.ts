@@ -6,6 +6,7 @@ import { siteRouter } from './site'
 import { ownersRouter } from './owners'
 import { emailsRouter } from './emails'
 import { analyticsRouter } from './analytics'
+import { galleryRouter } from './gallery'
 
 export const appRouter = router({
   content: contentRouter,
@@ -15,6 +16,7 @@ export const appRouter = router({
   owners: ownersRouter,
   emails: emailsRouter,
   analytics: analyticsRouter,
+  gallery: galleryRouter,
 })
 
 export type AppRouter = typeof appRouter

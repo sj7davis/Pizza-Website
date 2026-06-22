@@ -55,3 +55,16 @@ export const addOwnerInput = z.object({
 
 export const emailInput = z.object({ email: z.string().email({ pattern: /^[^@\s]+@[^@\s]+\.[^@\s]+$/ }) })
 export const orderClickInput = z.object({ platform: z.string().min(1).max(60) })
+
+export const galleryCreateInput = z.object({
+  url: z.string().min(1),
+  caption: z.string().max(200).optional().default(''),
+})
+
+export const galleryUpdateInput = z.object({
+  id: z.string(),
+  url: z.string().min(1),
+  caption: z.string().max(200),
+})
+
+export const galleryReorderInput = z.object({ ids: z.array(z.string()) })

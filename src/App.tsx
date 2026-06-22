@@ -4,6 +4,7 @@ import { StatusBanner } from './components/StatusBanner'
 import { Hero } from './components/Hero'
 import { Menu } from './components/Menu'
 import { Story } from './components/Story'
+import { Gallery } from './components/Gallery'
 import { Delivery } from './components/Delivery'
 import { Footer } from './components/Footer'
 
@@ -24,6 +25,7 @@ export default function App() {
       />
       <Menu items={content.menu} />
       <Story story={content.story} />
+      <Gallery />
       <Delivery area={content.delivery.area} hours={content.delivery.hours} suburbs={content.deliverySuburbs} />
       <Footer
         brandName={content.brandName}
