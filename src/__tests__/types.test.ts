@@ -25,6 +25,7 @@ describe('types', () => {
       promoActive: false,
       promoText: '',
       promoCode: '',
+      theme: 'editorial-dark' as const,
     }
     expect(sample.menu[0].name).toBe('X')
     expect(sample.story.paragraphs).toHaveLength(1)

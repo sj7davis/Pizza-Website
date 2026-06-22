@@ -45,6 +45,7 @@ model SiteContent {
   promoActive      Boolean  @default(false)
   promoText        String   @default("")
   promoCode        String   @default("")
+  theme            String   @default("editorial-dark")
   updatedAt        DateTime @updatedAt
 }
 

@@ -16,6 +16,7 @@ function makeDb() {
         deliverySuburbs: ['Airport West'],
         heroImage: '/dough.jpg',
         promoActive: false, promoText: '', promoCode: '',
+        theme: 'editorial-dark',
       }),
     },
     menuItem: {

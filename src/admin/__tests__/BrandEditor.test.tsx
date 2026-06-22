@@ -33,6 +33,7 @@ beforeEach(() => {
     promoActive: false,
     promoText: '',
     promoCode: '',
+    theme: 'editorial-dark',
   }
 })
 
@@ -63,6 +64,15 @@ describe('BrandEditor', () => {
     render(<BrandEditor />)
     fireEvent.click(screen.getByRole('button', { name: /^save$/i }))
     expect(await screen.findByRole('alert')).toHaveTextContent(/could not save/i)
+  })
+
+  it('selecting a different theme includes it in the saved input', async () => {
+    render(<BrandEditor />)
+    // Select bold-trattoria radio
+    fireEvent.click(screen.getByRole('radio', { name: /bold trattoria/i }))
+    fireEvent.click(screen.getByRole('button', { name: /^save$/i }))
+    await waitFor(() => expect(updateMutate).toHaveBeenCalled())
+    expect(updateMutate.mock.calls[0][0].theme).toBe('bold-trattoria')
   })
 
   it('adds a delivery suburb as a chip and saves it', async () => {

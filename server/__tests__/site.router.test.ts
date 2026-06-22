@@ -12,6 +12,7 @@ const validInput = {
   deliverySuburbs: ['Airport West'],
   heroImage: '/dough.jpg',
   promoActive: false, promoText: '', promoCode: '',
+  theme: 'editorial-dark' as const,
 }
 
 function caller(db: unknown, user: { id: string; email: string } | null = { id: 'u1', email: 'a@b.c' }) {
@@ -51,5 +52,25 @@ describe('site router', () => {
     expect(arg.create.promoText).toBe('Free delivery this weekend!')
     expect(arg.create.promoCode).toBe('FIRSTBITE')
     expect(arg.update.promoActive).toBe(true)
+  })
+
+  it('update round-trips theme field', async () => {
+    const upsert = vi.fn().mockResolvedValue({ id: 1 })
+    await caller({ siteContent: { upsert } }).site.update({
+      ...validInput,
+      theme: 'bold-trattoria',
+    })
+    const arg = upsert.mock.calls[0][0]
+    expect(arg.create.theme).toBe('bold-trattoria')
+    expect(arg.update.theme).toBe('bold-trattoria')
+  })
+
+  it('rejects invalid theme value', async () => {
+    await expect(
+      caller({ siteContent: { upsert: vi.fn() } }).site.update({
+        ...validInput,
+        theme: 'neon-chaos' as never,
+      }),
+    ).rejects.toThrow()
   })
 })

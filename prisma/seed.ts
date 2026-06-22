@@ -67,6 +67,7 @@ async function main() {
         promoActive: content.promoActive,
         promoText: content.promoText,
         promoCode: content.promoCode,
+        theme: content.theme,
       },
     })
     // eslint-disable-next-line no-console

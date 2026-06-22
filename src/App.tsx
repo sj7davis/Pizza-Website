@@ -8,13 +8,14 @@ import { Story } from './components/Story'
 import { Gallery } from './components/Gallery'
 import { Delivery } from './components/Delivery'
 import { Footer } from './components/Footer'
+import './styles/themes.css'
 
 export default function App() {
   const content = useContent()
   const status = useOpenStatus(content)
   const ordersDisabled = status.state !== 'open'
   return (
-    <>
+    <div className="site" data-theme={content.theme}>
       <PromoBanner />
       <StatusBanner status={status} />
       <Hero
@@ -34,6 +35,6 @@ export default function App() {
         orderLinks={content.orderLinks}
         socials={content.socials}
       />
-    </>
+    </div>
   )
 }

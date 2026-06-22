@@ -1,3 +1,7 @@
+import type { ThemeId } from './lib/themes'
+
+export type { ThemeId }
+
 export interface MenuItem {
   name: string
   /** Short one-line hook, e.g. "a slow, spreading heat". */
@@ -60,4 +64,5 @@ export interface SiteContent {
   promoActive: boolean
   promoText: string
   promoCode: string
+  theme: ThemeId
 }

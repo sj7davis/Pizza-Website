@@ -3,6 +3,7 @@ import { trpc } from '../lib/trpc'
 import { SaveStatus, type SaveState } from './SaveStatus'
 import { MELBOURNE_SUBURBS } from './suburbsData'
 import { ImageUploadField } from './ImageUploadField'
+import { THEMES, type ThemeId } from '../lib/themes'
 
 interface SocialRow { label: string; href: string }
 interface OrderRow { label: string; url: string }
@@ -29,6 +30,7 @@ interface BrandForm {
   promoActive: boolean
   promoText: string
   promoCode: string
+  theme: ThemeId
 }
 
 interface SiteRow {
@@ -53,6 +55,7 @@ interface SiteRow {
   promoActive: boolean
   promoText: string
   promoCode: string
+  theme: string
 }
 
 function rowToForm(r: SiteRow): BrandForm {
@@ -78,6 +81,7 @@ function rowToForm(r: SiteRow): BrandForm {
     promoActive: r.promoActive,
     promoText: r.promoText,
     promoCode: r.promoCode,
+    theme: (r.theme as ThemeId) ?? 'editorial-dark',
   }
 }
 
@@ -105,6 +109,7 @@ function formToInput(f: BrandForm) {
     promoActive: f.promoActive,
     promoText: f.promoText,
     promoCode: f.promoCode,
+    theme: f.theme,
   }
 }
 
@@ -166,6 +171,24 @@ export function BrandEditor() {
       <label>Hero tagline<input value={data.tagline} onChange={(e) => set('tagline', e.target.value)} /></label>
       <label>Hero background photo</label>
       <ImageUploadField value={data.heroImage || null} onChange={(url) => set('heroImage', url ?? '/dough.jpg')} />
+
+      <fieldset className="admin-fieldset" aria-label="site theme selector">
+        <legend>Site theme</legend>
+        <p className="admin-muted">Choose the overall colour palette for the public site.</p>
+        {THEMES.map((t) => (
+          <label key={t.id} className="admin-check" aria-label={`Theme: ${t.label}`}>
+            <input
+              type="radio"
+              name="site-theme"
+              value={t.id}
+              checked={data.theme === t.id}
+              onChange={() => set('theme', t.id)}
+              aria-label={t.label}
+            />
+            <strong>{t.label}</strong> — {t.description}
+          </label>
+        ))}
+      </fieldset>
 
       <fieldset className="admin-fieldset">
         <legend>Order links</legend>
