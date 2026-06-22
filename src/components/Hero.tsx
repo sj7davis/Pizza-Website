@@ -12,15 +12,12 @@ interface HeroProps {
   orderLinks: { label: string; url: string }[]
   ordersDisabled?: boolean
   status?: OpenStatus
+  heroImage?: string
 }
 
 const easing = [0.22, 1, 0.36, 1] as const
 
-// Toggle the dough photo behind the hero logo. Set to false to remove it (and
-// the Story section's dark background returns to being the only image-free option).
-const HERO_PHOTO_BG = true
-
-export function Hero({ brandName, tagline, orderLinks, ordersDisabled, status }: HeroProps) {
+export function Hero({ brandName, tagline, orderLinks, ordersDisabled, status, heroImage }: HeroProps) {
   const reduce = useReducedMotion()
   const orderClick = trpc.analytics.orderClick.useMutation()
   const step = (i: number) =>
@@ -33,7 +30,10 @@ export function Hero({ brandName, tagline, orderLinks, ordersDisabled, status }:
         }
 
   return (
-    <header className={HERO_PHOTO_BG ? 'hero hero--photo' : 'hero'}>
+    <header
+      className={heroImage ? 'hero hero--photo' : 'hero'}
+      style={heroImage ? { backgroundImage: `linear-gradient(rgba(18,17,13,0.5), rgba(18,17,13,0.7)), url(${heroImage})` } : undefined}
+    >
       <div className="hero__grain" aria-hidden="true" />
       <div className="container hero__inner">
         <div className="label hero__eyebrow">Pizza by Backhaus · Delivered</div>

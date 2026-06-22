@@ -63,6 +63,7 @@ async function main() {
         deliveryHours: content.delivery.hours,
         socials: content.socials as object,
         deliverySuburbs: content.deliverySuburbs,
+        heroImage: content.heroImage,
       },
     })
     // eslint-disable-next-line no-console

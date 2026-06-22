@@ -48,4 +48,5 @@ export interface SiteContent {
   delivery: { area: string; hours: string }
   socials: SocialLink[]
   deliverySuburbs: string[]
+  heroImage: string
 }

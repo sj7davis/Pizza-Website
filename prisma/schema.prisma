@@ -40,6 +40,7 @@ model SiteContent {
   deliveryHours    String
   socials          Json
   deliverySuburbs  String[] @default([])
+  heroImage        String   @default("/dough.jpg")
   updatedAt        DateTime @updatedAt
 }
 

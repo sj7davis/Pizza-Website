@@ -21,6 +21,7 @@ function toColumns(input: z.infer<typeof siteUpdateInput>) {
     deliveryHours: input.delivery.hours,
     socials: input.socials,
     deliverySuburbs: input.deliverySuburbs,
+    heroImage: input.heroImage,
   }
 }
 

@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from 'react'
 import { EmailSignup } from './EmailSignup'
+import { MELBOURNE_SUBURBS } from '../admin/suburbsData'
 import './DeliveryChecker.css'
 
 export function DeliveryChecker({ suburbs }: { suburbs: string[] }) {
@@ -17,7 +18,8 @@ export function DeliveryChecker({ suburbs }: { suburbs: string[] }) {
       <form onSubmit={check} className="delivery-checker__form">
         <label htmlFor="pbb-suburb" className="label">Do we deliver to you?</label>
         <div className="delivery-checker__row">
-          <input id="pbb-suburb" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Your suburb" aria-label="Suburb" />
+          <input id="pbb-suburb" list="pbb-delivery-suburbs" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Your suburb" aria-label="Suburb" />
+          <datalist id="pbb-delivery-suburbs">{MELBOURNE_SUBURBS.map((s) => <option key={s} value={s} />)}</datalist>
           <button type="submit">Check</button>
         </div>
       </form>
