@@ -1,5 +1,5 @@
 import { registerSW } from 'virtual:pwa-register'
-import { StrictMode } from 'react'
+import { StrictMode, Suspense, lazy } from 'react'
 import { createRoot } from 'react-dom/client'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { httpBatchLink } from '@trpc/client'
@@ -7,8 +7,11 @@ import superjson from 'superjson'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { trpc } from './lib/trpc'
 import App from './App'
-import { AdminApp } from './admin/AdminApp'
 import './theme.css'
+
+// The admin console (drag-and-drop, editors, etc.) is loaded on demand so it
+// never weighs down the public site's initial download.
+const AdminApp = lazy(() => import('./admin/AdminApp').then((m) => ({ default: m.AdminApp })))
 
 if (import.meta.env.PROD) {
   registerSW({ immediate: true })
@@ -31,10 +34,12 @@ createRoot(document.getElementById('root')!).render(
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
-          <Routes>
-            <Route path="/admin/*" element={<AdminApp />} />
-            <Route path="/*" element={<App />} />
-          </Routes>
+          <Suspense fallback={null}>
+            <Routes>
+              <Route path="/admin/*" element={<AdminApp />} />
+              <Route path="/*" element={<App />} />
+            </Routes>
+          </Suspense>
         </BrowserRouter>
       </QueryClientProvider>
     </trpc.Provider>
