@@ -49,4 +49,23 @@ describe('Gallery', () => {
     render(<Gallery />)
     expect(screen.getByText('From the oven')).toBeInTheDocument()
   })
+
+  it('renders prev/next arrow buttons when more than one image', () => {
+    queryState.isLoading = false
+    queryState.data = [
+      { id: '1', url: '/pizza1.jpg', caption: 'Margherita' },
+      { id: '2', url: '/pizza2.jpg', caption: 'Nduja' },
+    ]
+    render(<Gallery />)
+    expect(screen.getByRole('button', { name: 'Previous' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Next' })).toBeInTheDocument()
+  })
+
+  it('hides arrow buttons when only one image', () => {
+    queryState.isLoading = false
+    queryState.data = [{ id: '1', url: '/pizza1.jpg', caption: 'Solo' }]
+    render(<Gallery />)
+    expect(screen.queryByRole('button', { name: 'Previous' })).toBeNull()
+    expect(screen.queryByRole('button', { name: 'Next' })).toBeNull()
+  })
 })
