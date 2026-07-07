@@ -20,7 +20,10 @@ async function main() {
   // reset to ADMIN_PASSWORD once. REMOVE ADMIN_PASSWORD_RESET afterwards so future
   // deploys don't keep resetting it.
   const adminEmail = process.env.ADMIN_EMAIL?.trim()
-  const adminPassword = process.env.ADMIN_PASSWORD
+  // Trim the password too: a stray trailing space/newline in the env value (common
+  // when pasted into a dashboard) would otherwise be baked into the hash and make
+  // login impossible, since you can't type an invisible trailing character.
+  const adminPassword = process.env.ADMIN_PASSWORD?.trim()
   const forceReset = process.env.ADMIN_PASSWORD_RESET === 'true'
   if (adminEmail && adminPassword) {
     const existing = await prisma.adminUser.findUnique({ where: { email: adminEmail } })
