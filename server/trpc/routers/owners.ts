@@ -2,7 +2,7 @@ import { z } from 'zod'
 import { TRPCError } from '@trpc/server'
 import { router, adminProcedure } from '../trpc'
 import { hashPassword, verifyPassword } from '../../auth/password'
-import { changePasswordInput, addOwnerInput } from '../../validation'
+import { changePasswordInput, addOwnerInput, resetOwnerPasswordInput } from '../../validation'
 
 export const ownersRouter = router({
   list: adminProcedure.query(({ ctx }) =>
@@ -18,6 +18,20 @@ export const ownersRouter = router({
       where: { id: ctx.user.id },
       data: { passwordHash: await hashPassword(input.newPassword) },
     })
+    return { ok: true }
+  }),
+
+  // Reset another owner's password without knowing their current one. Admin-only,
+  // for when a staff member is locked out. Clears their sessions so the new
+  // password is required on next login.
+  resetPassword: adminProcedure.input(resetOwnerPasswordInput).mutation(async ({ ctx, input }) => {
+    const target = await ctx.db.adminUser.findUnique({ where: { id: input.id } })
+    if (!target) throw new TRPCError({ code: 'NOT_FOUND', message: 'That account no longer exists' })
+    await ctx.db.adminUser.update({
+      where: { id: input.id },
+      data: { passwordHash: await hashPassword(input.newPassword) },
+    })
+    await ctx.db.session.deleteMany({ where: { userId: input.id } })
     return { ok: true }
   }),
 

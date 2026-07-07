@@ -5,6 +5,7 @@ const ownersList = { data: [{ id: 'u1', email: 'owner@pbb.co' }], isLoading: fal
 const changePw = vi.fn().mockResolvedValue({ ok: true })
 const addOwner = vi.fn().mockResolvedValue({ id: 'u2', email: 'new@pbb.co' })
 const removeOwner = vi.fn().mockResolvedValue({ ok: true })
+const resetPw = vi.fn().mockResolvedValue({ ok: true })
 const invalidate = vi.fn()
 
 vi.mock('../../lib/trpc', () => ({
@@ -13,6 +14,7 @@ vi.mock('../../lib/trpc', () => ({
     owners: {
       list: { useQuery: () => ownersList },
       changePassword: { useMutation: () => ({ mutateAsync: changePw, isPending: false }) },
+      resetPassword: { useMutation: () => ({ mutateAsync: resetPw, isPending: false }) },
       add: { useMutation: (o?: { onSuccess?: () => void }) => ({ mutateAsync: async (v: unknown) => { const r = await addOwner(v); o?.onSuccess?.(); return r }, isPending: false }) },
       remove: { useMutation: (o?: { onSuccess?: () => void }) => ({ mutate: (v: unknown) => { removeOwner(v); o?.onSuccess?.() }, isPending: false }) },
     },
@@ -21,7 +23,7 @@ vi.mock('../../lib/trpc', () => ({
 
 import { AccountPanel } from '../AccountPanel'
 
-beforeEach(() => { changePw.mockClear(); addOwner.mockClear() })
+beforeEach(() => { changePw.mockClear(); addOwner.mockClear(); resetPw.mockClear() })
 
 describe('AccountPanel', () => {
   it('lists owners', () => {
@@ -41,5 +43,12 @@ describe('AccountPanel', () => {
     fireEvent.change(screen.getByLabelText(/new owner password/i), { target: { value: 'welcome123' } })
     fireEvent.click(screen.getByRole('button', { name: /add owner/i }))
     await waitFor(() => expect(addOwner).toHaveBeenCalledWith({ email: 'new@pbb.co', password: 'welcome123' }))
+  })
+  it('resets another owner password', async () => {
+    render(<AccountPanel />)
+    fireEvent.click(screen.getByRole('button', { name: /reset password for owner@pbb.co/i }))
+    fireEvent.change(screen.getByLabelText(/new password for owner@pbb.co/i), { target: { value: 'freshpass1' } })
+    fireEvent.click(screen.getByRole('button', { name: /^set password$/i }))
+    await waitFor(() => expect(resetPw).toHaveBeenCalledWith({ id: 'u1', newPassword: 'freshpass1' }))
   })
 })
