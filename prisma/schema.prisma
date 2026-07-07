@@ -71,11 +71,12 @@ model GalleryImage {
 }
 
 model AdminUser {
-  id           String    @id @default(cuid())
-  email        String    @unique
-  passwordHash String
-  createdAt    DateTime  @default(now())
-  sessions     Session[]
+  id             String          @id @default(cuid())
+  email          String          @unique
+  passwordHash   String
+  createdAt      DateTime        @default(now())
+  sessions       Session[]
+  passwordResets PasswordReset[]
 }
 
 model Session {
@@ -83,5 +84,15 @@ model Session {
   userId    String
   user      AdminUser @relation(fields: [userId], references: [id], onDelete: Cascade)
   expiresAt DateTime
+  createdAt DateTime  @default(now())
+}
+
+model PasswordReset {
+  id        String    @id @default(cuid())
+  userId    String
+  user      AdminUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
   createdAt DateTime  @default(now())
 }
