@@ -29,3 +29,12 @@ if (typeof window !== 'undefined' && !window.IntersectionObserver) {
     takeRecords() { return [] }
   }
 }
+
+// jsdom lacks ResizeObserver (Embla carousel needs it).
+if (typeof window !== 'undefined' && !window.ResizeObserver) {
+  window.ResizeObserver = class ResizeObserver {
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+  }
+}

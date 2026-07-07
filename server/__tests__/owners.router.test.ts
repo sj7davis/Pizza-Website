@@ -39,6 +39,25 @@ describe('owners router', () => {
     ).rejects.toMatchObject({ code: 'UNAUTHORIZED' })
   })
 
+  it('resetPassword updates the target hash and clears their sessions', async () => {
+    const update = vi.fn().mockResolvedValue({})
+    const deleteMany = vi.fn().mockResolvedValue({ count: 2 })
+    const db = {
+      adminUser: { findUnique: vi.fn().mockResolvedValue({ id: 'u2', email: 'staff@pbb.co' }), update },
+      session: { deleteMany },
+    }
+    const res = await caller(db).owners.resetPassword({ id: 'u2', newPassword: 'freshpass1' })
+    expect(res).toEqual({ ok: true })
+    expect(update.mock.calls[0][0].where).toEqual({ id: 'u2' })
+    expect(update.mock.calls[0][0].data.passwordHash).toBeTruthy()
+    expect(deleteMany).toHaveBeenCalledWith({ where: { userId: 'u2' } })
+  })
+
+  it('resetPassword rejects an unknown account', async () => {
+    const db = { adminUser: { findUnique: vi.fn().mockResolvedValue(null), update: vi.fn() }, session: { deleteMany: vi.fn() } }
+    await expect(caller(db).owners.resetPassword({ id: 'gone', newPassword: 'freshpass1' })).rejects.toMatchObject({ code: 'NOT_FOUND' })
+  })
+
   it('remove refuses to delete the last owner', async () => {
     const db = { adminUser: { count: vi.fn().mockResolvedValue(1), delete: vi.fn() } }
     await expect(caller(db).owners.remove({ id: 'u1' })).rejects.toMatchObject({ code: 'BAD_REQUEST' })

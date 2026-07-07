@@ -75,16 +75,11 @@ describe('BrandEditor', () => {
     expect(updateMutate.mock.calls[0][0].theme).toBe('bold-trattoria')
   })
 
-  it('adds a delivery suburb as a chip and saves it', async () => {
+  it('preserves existing delivery suburbs unchanged on save', async () => {
     render(<BrandEditor />)
-    expect(screen.getByText('Airport West')).toBeInTheDocument() // existing chip
-    fireEvent.change(screen.getByLabelText(/add delivery suburb/i), { target: { value: 'Niddrie' } })
-    fireEvent.click(screen.getByRole('button', { name: /^add$/i }))
-    expect(screen.getByText('Niddrie')).toBeInTheDocument()
     fireEvent.click(screen.getByRole('button', { name: /^save$/i }))
     await waitFor(() => expect(updateMutate).toHaveBeenCalled())
-    expect(updateMutate.mock.calls[0][0].deliverySuburbs).toEqual(
-      expect.arrayContaining(['Airport West', 'Niddrie']),
-    )
+    // Suburbs are no longer editable in the UI but must round-trip untouched.
+    expect(updateMutate.mock.calls[0][0].deliverySuburbs).toEqual(['Airport West'])
   })
 })

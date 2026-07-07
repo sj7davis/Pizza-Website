@@ -4,7 +4,7 @@ import { Delivery } from '../Delivery'
 
 describe('Delivery', () => {
   it('renders area and hours', () => {
-    render(<Delivery area="Airport West & surrounds" hours="5–9pm, nightly" suburbs={[]} />)
+    render(<Delivery area="Airport West & surrounds" hours="5–9pm, nightly" />)
     expect(screen.getByText(/Airport West & surrounds/)).toBeInTheDocument()
     expect(screen.getByText(/5–9pm, nightly/)).toBeInTheDocument()
   })

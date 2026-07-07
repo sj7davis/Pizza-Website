@@ -1,7 +1,6 @@
 import { useState, type FormEvent } from 'react'
 import { trpc } from '../lib/trpc'
 import { SaveStatus, type SaveState } from './SaveStatus'
-import { MELBOURNE_SUBURBS } from './suburbsData'
 import { ImageUploadField } from './ImageUploadField'
 import { THEMES, type ThemeId } from '../lib/themes'
 
@@ -119,7 +118,6 @@ export function BrandEditor() {
   const update = trpc.site.update.useMutation({ onSuccess: () => utils.site.get.invalidate() })
   const [form, setForm] = useState<BrandForm | null>(null)
   const [save, setSave] = useState<SaveState>({ status: 'idle' })
-  const [newSuburb, setNewSuburb] = useState('')
 
   if (get.isLoading) return <p>Loading…</p>
   const data = form ?? (get.data ? rowToForm(get.data as unknown as SiteRow) : null)
@@ -141,16 +139,6 @@ export function BrandEditor() {
     if (j < 0 || j >= next.length) return
     ;[next[i], next[j]] = [next[j], next[i]]
     set('orderLinks', next)
-  }
-  function addSuburb(name: string) {
-    const v = name.trim()
-    setNewSuburb('')
-    if (!v) return
-    if (data!.deliverySuburbs.some((s) => s.toLowerCase() === v.toLowerCase())) return
-    set('deliverySuburbs', [...data!.deliverySuburbs, v])
-  }
-  function removeSuburb(i: number) {
-    set('deliverySuburbs', data!.deliverySuburbs.filter((_, idx) => idx !== i))
   }
 
   async function submit(e: FormEvent) {
@@ -220,49 +208,6 @@ export function BrandEditor() {
       <label>Established line<input value={data.established} onChange={(e) => set('established', e.target.value)} /></label>
       <label>Delivery area<input value={data.area} onChange={(e) => set('area', e.target.value)} /></label>
       <label>Delivery hours (display text)<input value={data.hours} onChange={(e) => set('hours', e.target.value)} /></label>
-      <fieldset className="admin-fieldset">
-        <legend>Delivery suburbs</legend>
-        <p className="admin-muted">Used by the "Do we deliver to you?" checker. Start typing to add a suburb; click ✕ on a tag to remove it. Remember to press <strong>Save</strong> after changes.</p>
-        {data.deliverySuburbs.length > 0 && (
-          <ul className="admin-chips" aria-label="delivery suburbs">
-            {data.deliverySuburbs.map((s, i) => (
-              <li className="admin-chip" key={s}>
-                <span>{s}</span>
-                <button
-                  type="button"
-                  className="admin-chip__remove"
-                  onClick={() => removeSuburb(i)}
-                  aria-label={`Remove ${s}`}
-                  title={`Remove ${s}`}
-                >
-                  ✕
-                </button>
-              </li>
-            ))}
-          </ul>
-        )}
-        <div className="admin-actions">
-          <input
-            list="pbb-suburb-options"
-            value={newSuburb}
-            onChange={(e) => setNewSuburb(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                e.preventDefault()
-                addSuburb(newSuburb)
-              }
-            }}
-            placeholder="Add a suburb…"
-            aria-label="add delivery suburb"
-          />
-          <button type="button" onClick={() => addSuburb(newSuburb)}>Add</button>
-          <datalist id="pbb-suburb-options">
-            {MELBOURNE_SUBURBS.map((s) => (
-              <option key={s} value={s} />
-            ))}
-          </datalist>
-        </div>
-      </fieldset>
 
       <fieldset className="admin-fieldset">
         <legend>Promotions</legend>
