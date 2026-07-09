@@ -17,6 +17,7 @@ import {
 } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { trpc } from '../lib/trpc'
+import { content } from '../content'
 import { ImageUploadField } from './ImageUploadField'
 import { SaveStatus, type SaveState } from './SaveStatus'
 import type { HeroBlock, HeroBlockAlign } from '../types'
@@ -296,7 +297,17 @@ export function HeaderBuilder() {
         Compose the hero shown at the top of the site. Drag to reorder blocks; leave empty to use the classic layout.
       </p>
 
-      {list.length === 0 && <p className="admin-muted">No blocks yet — using the default hero layout. Add a block below.</p>}
+      {list.length === 0 && (
+        <div className="admin-muted">
+          <p>No blocks yet — the site is using the default hero layout. Add blocks below, or start from the current design and edit it:</p>
+          <button
+            type="button"
+            onClick={() => setBlocks(content.heroBlocks.map((b) => ({ ...b })))}
+          >
+            Start from the current layout
+          </button>
+        </div>
+      )}
 
       <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
         <SortableContext items={list.map((b) => b.id)} strategy={verticalListSortingStrategy}>
