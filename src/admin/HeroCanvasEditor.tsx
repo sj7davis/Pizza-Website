@@ -181,8 +181,11 @@ export function HeroCanvasEditor({ canvas, heroImage, brandName, onChange }: Pro
           const yPx = (layout.y / 100) * height
           const wPx = (layout.w / 100) * totalW
           return (
+            // Key by device so switching Desktop/Mobile remounts the box with the
+            // correct per-device position/size — otherwise react-rnd keeps its
+            // internal position and a drag on one device bleeds into the other.
             <Rnd
-              key={el.id}
+              key={`${el.id}-${device}`}
               size={{ width: wPx, height: 'auto' }}
               position={{ x: xPx, y: yPx }}
               onDragStop={(_e, d) => handleDragResize(el.id, d.x, d.y, wPx)}
