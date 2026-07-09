@@ -42,6 +42,7 @@ model SiteContent {
   socials          Json
   deliverySuburbs  String[] @default([])
   heroImage        String   @default("/dough.jpg")
+  heroBlocks       Json     @default("[]")
   promoActive      Boolean  @default(false)
   promoText        String   @default("")
   promoCode        String   @default("")

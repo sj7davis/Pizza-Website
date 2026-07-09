@@ -39,6 +39,7 @@ describe('mappers', () => {
         socials: [{ label: 'Instagram', href: '#ig' }],
         deliverySuburbs: ['Airport West'],
         heroImage: '/dough.jpg',
+        heroBlocks: [{ id: 'b1', type: 'heading', value: 'PBV' }],
         promoActive: false, promoText: '', promoCode: '',
         theme: 'editorial-dark',
       },
@@ -48,6 +49,43 @@ describe('mappers', () => {
     expect(site.delivery).toEqual({ area: 'Airport West', hours: '5-9pm' })
     expect(site.socials[0]).toEqual({ label: 'Instagram', href: '#ig' })
     expect(site.menu).toHaveLength(1)
+    expect(site.heroBlocks).toEqual([{ id: 'b1', type: 'heading', value: 'PBV' }])
+  })
+
+  it('rowsToSiteContent defaults heroBlocks to [] when missing and drops invalid entries', () => {
+    const siteMissing = rowsToSiteContent(
+      {
+        brandName: 'PBV', tagline: 'tag',
+        orderLinks: [], openTime: '17:00', closeTime: '21:00', timezone: 'UTC',
+        soldOut: false, soldOutMessage: 'x',
+        storyEyebrow: 'e', storyHeading: 'h', storyParagraphs: ['p'],
+        storyPullquote: 'q', storyEstablished: 'est',
+        deliveryArea: 'a', deliveryHours: 'h',
+        socials: [], deliverySuburbs: [], heroImage: '/dough.jpg',
+        heroBlocks: undefined,
+        promoActive: false, promoText: '', promoCode: '',
+        theme: 'editorial-dark',
+      },
+      [],
+    )
+    expect(siteMissing.heroBlocks).toEqual([])
+
+    const siteInvalid = rowsToSiteContent(
+      {
+        brandName: 'PBV', tagline: 'tag',
+        orderLinks: [], openTime: '17:00', closeTime: '21:00', timezone: 'UTC',
+        soldOut: false, soldOutMessage: 'x',
+        storyEyebrow: 'e', storyHeading: 'h', storyParagraphs: ['p'],
+        storyPullquote: 'q', storyEstablished: 'est',
+        deliveryArea: 'a', deliveryHours: 'h',
+        socials: [], deliverySuburbs: [], heroImage: '/dough.jpg',
+        heroBlocks: [{ id: 'b1', type: 'heading', value: 'PBV' }, { type: 'nonsense' }],
+        promoActive: false, promoText: '', promoCode: '',
+        theme: 'editorial-dark',
+      },
+      [],
+    )
+    expect(siteInvalid.heroBlocks).toEqual([{ id: 'b1', type: 'heading', value: 'PBV' }])
   })
 
   it('rowsToSiteContent includes promo fields', () => {
@@ -60,6 +98,7 @@ describe('mappers', () => {
         storyPullquote: 'q', storyEstablished: 'est',
         deliveryArea: 'Airport West', deliveryHours: '5-9pm',
         socials: [], deliverySuburbs: [], heroImage: '/dough.jpg',
+        heroBlocks: [],
         promoActive: true, promoText: 'Free delivery!', promoCode: 'FIRSTBITE',
         theme: 'editorial-dark',
       },
@@ -80,6 +119,7 @@ describe('mappers', () => {
         storyPullquote: 'q', storyEstablished: 'est',
         deliveryArea: 'a', deliveryHours: 'h',
         socials: [], deliverySuburbs: [], heroImage: '/dough.jpg',
+        heroBlocks: [],
         promoActive: false, promoText: '', promoCode: '',
         theme: 'light-minimal',
       },

@@ -67,6 +67,7 @@ async function main() {
         socials: content.socials as object,
         deliverySuburbs: content.deliverySuburbs,
         heroImage: content.heroImage,
+        heroBlocks: content.heroBlocks as object,
         promoActive: content.promoActive,
         promoText: content.promoText,
         promoCode: content.promoCode,

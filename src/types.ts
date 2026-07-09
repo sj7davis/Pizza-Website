@@ -42,6 +42,17 @@ export interface GalleryImage {
   caption: string
 }
 
+export type HeroBlockAlign = 'left' | 'center' | 'right'
+
+export type HeroBlock =
+  | { id: string; type: 'eyebrow'; value: string; align?: HeroBlockAlign }
+  | { id: string; type: 'heading'; value: string; align?: HeroBlockAlign }
+  | { id: string; type: 'text'; value: string; align?: HeroBlockAlign; size?: 'sm' | 'md' | 'lg' }
+  | { id: string; type: 'image'; url: string; alt?: string; width?: 'sm' | 'md' | 'lg' | 'full'; align?: HeroBlockAlign }
+  | { id: string; type: 'buttons'; align?: HeroBlockAlign }
+  | { id: string; type: 'status' }
+  | { id: string; type: 'divider' }
+
 export interface SiteContent {
   brandName: string
   tagline: string
@@ -65,4 +76,6 @@ export interface SiteContent {
   promoText: string
   promoCode: string
   theme: ThemeId
+  /** Ordered hero/header blocks. Empty/undefined falls back to the classic hardcoded hero layout. */
+  heroBlocks: HeroBlock[]
 }

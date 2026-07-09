@@ -25,6 +25,7 @@ export default function App() {
         ordersDisabled={ordersDisabled}
         status={status}
         heroImage={content.heroImage}
+        blocks={content.heroBlocks}
       />
       <Menu items={content.menu} />
       <Story story={content.story} />
