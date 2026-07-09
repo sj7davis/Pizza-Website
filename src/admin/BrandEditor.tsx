@@ -145,7 +145,17 @@ export function BrandEditor() {
     e.preventDefault()
     setSave({ status: 'saving' })
     try {
-      await update.mutateAsync(formToInput(data!))
+      // This editor doesn't manage the hero builder/canvas, but site.update needs
+      // the full payload — pass the existing values through so saving Brand never
+      // wipes the owner's hero blocks or freeform canvas.
+      const raw = get.data as unknown as { heroBlocks?: unknown; heroCanvas?: unknown } | undefined
+      await update.mutateAsync({
+        ...formToInput(data!),
+        heroBlocks: (raw?.heroBlocks as never) ?? [],
+        heroCanvas:
+          (raw?.heroCanvas as never) ??
+          ({ enabled: false, desktopHeight: 560, mobileHeight: 620, elements: [] } as never),
+      })
       setSave({ status: 'saved' })
     } catch {
       setSave({ status: 'error', message: 'Could not save — check the fields and try again.' })
