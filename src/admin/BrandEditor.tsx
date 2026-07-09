@@ -145,16 +145,27 @@ export function BrandEditor() {
     e.preventDefault()
     setSave({ status: 'saving' })
     try {
-      // This editor doesn't manage the hero builder/canvas, but site.update needs
-      // the full payload — pass the existing values through so saving Brand never
-      // wipes the owner's hero blocks or freeform canvas.
-      const raw = get.data as unknown as { heroBlocks?: unknown; heroCanvas?: unknown } | undefined
+      // This editor doesn't manage the hero builder/canvas or navbar, but site.update
+      // needs the full payload — pass the existing values through so saving Brand
+      // never wipes the owner's hero blocks, freeform canvas, or navigation bar.
+      const raw = get.data as unknown as { heroBlocks?: unknown; heroCanvas?: unknown; navbar?: unknown } | undefined
       await update.mutateAsync({
         ...formToInput(data!),
         heroBlocks: (raw?.heroBlocks as never) ?? [],
         heroCanvas:
           (raw?.heroCanvas as never) ??
           ({ enabled: false, desktopHeight: 560, mobileHeight: 620, elements: [] } as never),
+        navbar:
+          (raw?.navbar as never) ??
+          ({
+            enabled: true,
+            showOrder: true,
+            links: [
+              { id: 'n1', label: 'Menu', href: '#menu' },
+              { id: 'n2', label: 'Our Story', href: '#story' },
+              { id: 'n3', label: 'Delivery', href: '#delivery' },
+            ],
+          } as never),
       })
       setSave({ status: 'saved' })
     } catch {

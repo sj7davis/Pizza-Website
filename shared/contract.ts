@@ -8,4 +8,6 @@ export type {
   HeroCanvasElement,
   HeroCanvasElementType,
   HeroDeviceLayout,
+  NavLink,
+  NavBar,
 } from '../src/types'

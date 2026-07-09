@@ -44,6 +44,7 @@ model SiteContent {
   heroImage        String   @default("/dough.jpg")
   heroBlocks       Json     @default("[]")
   heroCanvas       Json     @default("{\"enabled\":false,\"desktopHeight\":560,\"mobileHeight\":620,\"elements\":[]}")
+  navbar           Json     @default("{\"enabled\":true,\"showOrder\":true,\"links\":[{\"id\":\"n1\",\"label\":\"Menu\",\"href\":\"#menu\"},{\"id\":\"n2\",\"label\":\"Our Story\",\"href\":\"#story\"},{\"id\":\"n3\",\"label\":\"Delivery\",\"href\":\"#delivery\"}]}")
   promoActive      Boolean  @default(false)
   promoText        String   @default("")
   promoCode        String   @default("")

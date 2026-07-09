@@ -7,6 +7,7 @@ import {
   themeIdSchema,
   heroBlocksSchema,
   heroCanvasSchema,
+  navbarSchema,
 } from './validation'
 
 export interface MenuItemRow {
@@ -40,6 +41,7 @@ export interface SiteContentRow {
   heroImage: string
   heroBlocks: unknown
   heroCanvas: unknown
+  navbar: unknown
   promoActive: boolean
   promoText: string
   promoCode: string
@@ -83,6 +85,7 @@ export function rowsToSiteContent(site: SiteContentRow, menuRows: MenuItemRow[])
     heroImage: site.heroImage,
     heroBlocks: heroBlocksSchema.parse(site.heroBlocks),
     heroCanvas: heroCanvasSchema.parse(site.heroCanvas),
+    navbar: navbarSchema.parse(site.navbar),
     promoActive: site.promoActive,
     promoText: site.promoText,
     promoCode: site.promoCode,

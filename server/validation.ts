@@ -95,6 +95,40 @@ export const heroCanvasSchema = z
       .map((r) => r.data),
   }))
 
+export const navLinkSchema = z.object({
+  id: z.string().min(1),
+  label: z.string(),
+  href: z.string(),
+})
+
+const DEFAULT_NAVBAR = {
+  enabled: true,
+  showOrder: true,
+  links: [
+    { id: 'n1', label: 'Menu', href: '#menu' },
+    { id: 'n2', label: 'Our Story', href: '#story' },
+    { id: 'n3', label: 'Delivery', href: '#delivery' },
+  ],
+}
+
+/** Permissive: coerce/validate; drop link entries that don't match the shape. */
+export const navbarSchema = z
+  .object({
+    enabled: z.boolean().optional().default(true),
+    showOrder: z.boolean().optional().default(true),
+    links: z.array(z.unknown()).optional().default(DEFAULT_NAVBAR.links),
+  })
+  .optional()
+  .default(DEFAULT_NAVBAR)
+  .transform((navbar) => ({
+    enabled: navbar.enabled ?? true,
+    showOrder: navbar.showOrder ?? true,
+    links: (navbar.links ?? [])
+      .map((item) => navLinkSchema.safeParse(item))
+      .filter((r): r is { success: true; data: z.infer<typeof navLinkSchema> } => r.success)
+      .map((r) => r.data),
+  }))
+
 export const siteUpdateInput = z.object({
   brandName: z.string().min(1),
   tagline: z.string().min(1),
@@ -117,6 +151,7 @@ export const siteUpdateInput = z.object({
   heroImage: z.string().min(1),
   heroBlocks: z.array(heroBlockSchema).default([]),
   heroCanvas: heroCanvasSchema,
+  navbar: navbarSchema,
   promoActive: z.boolean(),
   promoText: z.string().max(160),
   promoCode: z.string().max(40),

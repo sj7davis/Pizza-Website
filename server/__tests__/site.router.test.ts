@@ -116,4 +116,35 @@ describe('site router', () => {
       }),
     ).rejects.toThrow()
   })
+
+  it('update round-trips navbar', async () => {
+    const upsert = vi.fn().mockResolvedValue({ id: 1 })
+    const navbar = {
+      enabled: true,
+      showOrder: true,
+      links: [
+        { id: 'n1', label: 'Menu', href: '#menu' },
+        { id: 'n2', label: 'Our Story', href: '#story' },
+      ],
+    }
+    await caller({ siteContent: { upsert } }).site.update({ ...validInput, navbar })
+    const arg = upsert.mock.calls[0][0]
+    expect(arg.create.navbar).toEqual(navbar)
+    expect(arg.update.navbar).toEqual(navbar)
+  })
+
+  it('defaults navbar to the standard links when omitted', async () => {
+    const upsert = vi.fn().mockResolvedValue({ id: 1 })
+    await caller({ siteContent: { upsert } }).site.update(validInput)
+    const arg = upsert.mock.calls[0][0]
+    expect(arg.create.navbar).toEqual({
+      enabled: true,
+      showOrder: true,
+      links: [
+        { id: 'n1', label: 'Menu', href: '#menu' },
+        { id: 'n2', label: 'Our Story', href: '#story' },
+        { id: 'n3', label: 'Delivery', href: '#delivery' },
+      ],
+    })
+  })
 })

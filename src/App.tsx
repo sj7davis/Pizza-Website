@@ -1,5 +1,6 @@
 import { useContent } from './lib/useContent'
 import { useOpenStatus } from './lib/useOpenStatus'
+import { Navbar } from './components/Navbar'
 import { PromoBanner } from './components/PromoBanner'
 import { StatusBanner } from './components/StatusBanner'
 import { Hero } from './components/Hero'
@@ -16,6 +17,12 @@ export default function App() {
   const ordersDisabled = status.state !== 'open'
   return (
     <div className="site" data-theme={content.theme}>
+      <Navbar
+        brandName={content.brandName}
+        navbar={content.navbar}
+        orderLinks={content.orderLinks}
+        ordersDisabled={ordersDisabled}
+      />
       <PromoBanner />
       <StatusBanner status={status} />
       <Hero

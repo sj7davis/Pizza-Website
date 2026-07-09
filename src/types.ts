@@ -81,6 +81,18 @@ export interface HeroCanvas {
   elements: HeroCanvasElement[]
 }
 
+export interface NavLink {
+  id: string
+  label: string
+  href: string
+}
+
+export interface NavBar {
+  enabled: boolean
+  links: NavLink[]
+  showOrder: boolean
+}
+
 export interface SiteContent {
   brandName: string
   tagline: string
@@ -108,4 +120,6 @@ export interface SiteContent {
   heroBlocks: HeroBlock[]
   /** Freeform hero canvas (Elementor-style). Takes precedence over heroBlocks when enabled with elements. */
   heroCanvas: HeroCanvas
+  /** Sticky top navigation bar, separate from the hero. */
+  navbar: NavBar
 }

@@ -21,7 +21,7 @@ import { content } from '../content'
 import { ImageUploadField } from './ImageUploadField'
 import { SaveStatus, type SaveState } from './SaveStatus'
 import { HeroCanvasEditor } from './HeroCanvasEditor'
-import type { HeroBlock, HeroBlockAlign, HeroCanvas } from '../types'
+import type { HeroBlock, HeroBlockAlign, HeroCanvas, NavBar } from '../types'
 import type { ThemeId } from '../lib/themes'
 
 interface SocialRow { label: string; href: string }
@@ -48,6 +48,7 @@ interface SiteRow {
   heroImage: string
   heroBlocks: HeroBlock[]
   heroCanvas: HeroCanvas
+  navbar: NavBar
   promoActive: boolean
   promoText: string
   promoCode: string
@@ -79,6 +80,7 @@ function siteRowToInput(r: SiteRow, heroBlocks: HeroBlock[], heroCanvas: HeroCan
     heroImage: r.heroImage,
     heroBlocks,
     heroCanvas,
+    navbar: r.navbar,
     promoActive: r.promoActive,
     promoText: r.promoText,
     promoCode: r.promoCode,
