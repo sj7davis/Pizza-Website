@@ -56,6 +56,105 @@ export const heroBlocksSchema = z
       .map((r) => r.data),
   )
 
+const heroCanvasDeviceLayoutSchema = z.object({
+  x: z.number().min(0).max(100),
+  y: z.number().min(0).max(100),
+  w: z.number().min(0).max(100),
+  align: z.enum(['left', 'center', 'right']).optional(),
+  fontSize: z.number().positive().optional(),
+  hidden: z.boolean().optional(),
+})
+
+export const heroCanvasElementSchema = z.object({
+  id: z.string().min(1),
+  type: z.enum(['heading', 'text', 'image', 'buttons', 'logo', 'status', 'divider']),
+  value: z.string().optional(),
+  url: z.string().optional(),
+  alt: z.string().optional(),
+  desktop: heroCanvasDeviceLayoutSchema,
+  mobile: heroCanvasDeviceLayoutSchema,
+})
+
+/** Permissive: drop entries that don't match the shape rather than failing the whole parse. */
+export const heroCanvasSchema = z
+  .object({
+    enabled: z.boolean().optional().default(false),
+    desktopHeight: z.number().positive().optional().default(560),
+    mobileHeight: z.number().positive().optional().default(620),
+    elements: z.array(z.unknown()).optional().default([]),
+  })
+  .optional()
+  .default({ enabled: false, desktopHeight: 560, mobileHeight: 620, elements: [] })
+  .transform((canvas) => ({
+    enabled: canvas.enabled ?? false,
+    desktopHeight: canvas.desktopHeight ?? 560,
+    mobileHeight: canvas.mobileHeight ?? 620,
+    elements: (canvas.elements ?? [])
+      .map((item) => heroCanvasElementSchema.safeParse(item))
+      .filter((r): r is { success: true; data: z.infer<typeof heroCanvasElementSchema> } => r.success)
+      .map((r) => r.data),
+  }))
+
+export const navLinkSchema = z.object({
+  id: z.string().min(1),
+  label: z.string(),
+  href: z.string(),
+})
+
+const DEFAULT_NAVBAR_CANVAS: { enabled: boolean; desktopHeight: number; mobileHeight: number; elements: z.infer<typeof heroCanvasElementSchema>[] } =
+  { enabled: false, desktopHeight: 90, mobileHeight: 64, elements: [] }
+
+const DEFAULT_NAVBAR = {
+  enabled: true,
+  showOrder: true,
+  links: [
+    { id: 'n1', label: 'Menu', href: '#menu' },
+    { id: 'n2', label: 'Our Story', href: '#story' },
+    { id: 'n3', label: 'Delivery', href: '#delivery' },
+  ],
+  canvas: DEFAULT_NAVBAR_CANVAS,
+}
+
+/** Same shape as heroCanvasSchema, but with the nav bar's own (much shorter) default heights. */
+const navCanvasSchema = z
+  .object({
+    enabled: z.boolean().optional().default(false),
+    desktopHeight: z.number().positive().optional().default(90),
+    mobileHeight: z.number().positive().optional().default(64),
+    elements: z.array(z.unknown()).optional().default([]),
+  })
+  .optional()
+  .default(DEFAULT_NAVBAR_CANVAS)
+  .transform((canvas) => ({
+    enabled: canvas.enabled ?? false,
+    desktopHeight: canvas.desktopHeight ?? 90,
+    mobileHeight: canvas.mobileHeight ?? 64,
+    elements: (canvas.elements ?? [])
+      .map((item) => heroCanvasElementSchema.safeParse(item))
+      .filter((r): r is { success: true; data: z.infer<typeof heroCanvasElementSchema> } => r.success)
+      .map((r) => r.data),
+  }))
+
+/** Permissive: coerce/validate; drop link entries that don't match the shape. */
+export const navbarSchema = z
+  .object({
+    enabled: z.boolean().optional().default(true),
+    showOrder: z.boolean().optional().default(true),
+    links: z.array(z.unknown()).optional().default(DEFAULT_NAVBAR.links),
+    canvas: navCanvasSchema,
+  })
+  .optional()
+  .default(DEFAULT_NAVBAR)
+  .transform((navbar) => ({
+    enabled: navbar.enabled ?? true,
+    showOrder: navbar.showOrder ?? true,
+    links: (navbar.links ?? [])
+      .map((item) => navLinkSchema.safeParse(item))
+      .filter((r): r is { success: true; data: z.infer<typeof navLinkSchema> } => r.success)
+      .map((r) => r.data),
+    canvas: navbar.canvas ?? DEFAULT_NAVBAR_CANVAS,
+  }))
+
 export const siteUpdateInput = z.object({
   brandName: z.string().min(1),
   tagline: z.string().min(1),
@@ -77,6 +176,8 @@ export const siteUpdateInput = z.object({
   deliverySuburbs: z.array(z.string()),
   heroImage: z.string().min(1),
   heroBlocks: z.array(heroBlockSchema).default([]),
+  heroCanvas: heroCanvasSchema,
+  navbar: navbarSchema,
   promoActive: z.boolean(),
   promoText: z.string().max(160),
   promoCode: z.string().max(40),

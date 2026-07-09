@@ -40,6 +40,8 @@ describe('mappers', () => {
         deliverySuburbs: ['Airport West'],
         heroImage: '/dough.jpg',
         heroBlocks: [{ id: 'b1', type: 'heading', value: 'PBV' }],
+        heroCanvas: undefined,
+        navbar: undefined,
         promoActive: false, promoText: '', promoCode: '',
         theme: 'editorial-dark',
       },
@@ -63,12 +65,15 @@ describe('mappers', () => {
         deliveryArea: 'a', deliveryHours: 'h',
         socials: [], deliverySuburbs: [], heroImage: '/dough.jpg',
         heroBlocks: undefined,
+        heroCanvas: undefined,
+        navbar: undefined,
         promoActive: false, promoText: '', promoCode: '',
         theme: 'editorial-dark',
       },
       [],
     )
     expect(siteMissing.heroBlocks).toEqual([])
+    expect(siteMissing.heroCanvas).toEqual({ enabled: false, desktopHeight: 560, mobileHeight: 620, elements: [] })
 
     const siteInvalid = rowsToSiteContent(
       {
@@ -80,6 +85,8 @@ describe('mappers', () => {
         deliveryArea: 'a', deliveryHours: 'h',
         socials: [], deliverySuburbs: [], heroImage: '/dough.jpg',
         heroBlocks: [{ id: 'b1', type: 'heading', value: 'PBV' }, { type: 'nonsense' }],
+        heroCanvas: undefined,
+        navbar: undefined,
         promoActive: false, promoText: '', promoCode: '',
         theme: 'editorial-dark',
       },
@@ -99,6 +106,8 @@ describe('mappers', () => {
         deliveryArea: 'Airport West', deliveryHours: '5-9pm',
         socials: [], deliverySuburbs: [], heroImage: '/dough.jpg',
         heroBlocks: [],
+        heroCanvas: undefined,
+        navbar: undefined,
         promoActive: true, promoText: 'Free delivery!', promoCode: 'FIRSTBITE',
         theme: 'editorial-dark',
       },
@@ -120,6 +129,8 @@ describe('mappers', () => {
         deliveryArea: 'a', deliveryHours: 'h',
         socials: [], deliverySuburbs: [], heroImage: '/dough.jpg',
         heroBlocks: [],
+        heroCanvas: undefined,
+        navbar: undefined,
         promoActive: false, promoText: '', promoCode: '',
         theme: 'light-minimal',
       },

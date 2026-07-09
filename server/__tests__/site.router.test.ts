@@ -49,6 +49,35 @@ describe('site router', () => {
     expect(arg.update.heroBlocks).toEqual(heroBlocks)
   })
 
+  it('update round-trips heroCanvas', async () => {
+    const upsert = vi.fn().mockResolvedValue({ id: 1 })
+    const heroCanvas = {
+      enabled: true,
+      desktopHeight: 600,
+      mobileHeight: 640,
+      elements: [
+        {
+          id: 'e1',
+          type: 'heading' as const,
+          value: 'PBV',
+          desktop: { x: 10, y: 10, w: 60, align: 'left' as const, fontSize: 48 },
+          mobile: { x: 5, y: 5, w: 90, align: 'center' as const, fontSize: 32 },
+        },
+      ],
+    }
+    await caller({ siteContent: { upsert } }).site.update({ ...validInput, heroCanvas })
+    const arg = upsert.mock.calls[0][0]
+    expect(arg.create.heroCanvas).toEqual(heroCanvas)
+    expect(arg.update.heroCanvas).toEqual(heroCanvas)
+  })
+
+  it('defaults heroCanvas to disabled/empty when omitted', async () => {
+    const upsert = vi.fn().mockResolvedValue({ id: 1 })
+    await caller({ siteContent: { upsert } }).site.update(validInput)
+    const arg = upsert.mock.calls[0][0]
+    expect(arg.create.heroCanvas).toEqual({ enabled: false, desktopHeight: 560, mobileHeight: 620, elements: [] })
+  })
+
   it('rejects invalid input (empty brandName)', async () => {
     await expect(
       caller({ siteContent: { upsert: vi.fn() } }).site.update({ ...validInput, brandName: '' }),
@@ -86,5 +115,74 @@ describe('site router', () => {
         theme: 'neon-chaos' as never,
       }),
     ).rejects.toThrow()
+  })
+
+  it('update round-trips navbar', async () => {
+    const upsert = vi.fn().mockResolvedValue({ id: 1 })
+    const navbar = {
+      enabled: true,
+      showOrder: true,
+      links: [
+        { id: 'n1', label: 'Menu', href: '#menu' },
+        { id: 'n2', label: 'Our Story', href: '#story' },
+      ],
+      canvas: { enabled: false, desktopHeight: 90, mobileHeight: 64, elements: [] },
+    }
+    await caller({ siteContent: { upsert } }).site.update({ ...validInput, navbar })
+    const arg = upsert.mock.calls[0][0]
+    expect(arg.create.navbar).toEqual(navbar)
+    expect(arg.update.navbar).toEqual(navbar)
+  })
+
+  it('defaults navbar to the standard links when omitted', async () => {
+    const upsert = vi.fn().mockResolvedValue({ id: 1 })
+    await caller({ siteContent: { upsert } }).site.update(validInput)
+    const arg = upsert.mock.calls[0][0]
+    expect(arg.create.navbar).toEqual({
+      enabled: true,
+      showOrder: true,
+      links: [
+        { id: 'n1', label: 'Menu', href: '#menu' },
+        { id: 'n2', label: 'Our Story', href: '#story' },
+        { id: 'n3', label: 'Delivery', href: '#delivery' },
+      ],
+      canvas: { enabled: false, desktopHeight: 90, mobileHeight: 64, elements: [] },
+    })
+  })
+
+  it('round-trips navbar.canvas with multiple image elements and per-device layouts', async () => {
+    const upsert = vi.fn().mockResolvedValue({ id: 1 })
+    const navbar = {
+      enabled: true,
+      showOrder: true,
+      links: [],
+      canvas: {
+        enabled: true,
+        desktopHeight: 100,
+        mobileHeight: 70,
+        elements: [
+          {
+            id: 'e1',
+            type: 'image',
+            url: '/promo1.jpg',
+            alt: 'Promo one',
+            desktop: { x: 0, y: 0, w: 20 },
+            mobile: { x: 0, y: 0, w: 40 },
+          },
+          {
+            id: 'e2',
+            type: 'image',
+            url: '/promo2.jpg',
+            alt: 'Promo two',
+            desktop: { x: 25, y: 0, w: 20, hidden: true },
+            mobile: { x: 45, y: 0, w: 40 },
+          },
+        ],
+      },
+    }
+    await caller({ siteContent: { upsert } }).site.update({ ...validInput, navbar })
+    const arg = upsert.mock.calls[0][0]
+    expect(arg.create.navbar.canvas.elements).toHaveLength(2)
+    expect(arg.create.navbar.canvas.elements[1].desktop.hidden).toBe(true)
   })
 })

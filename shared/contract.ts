@@ -1,1 +1,13 @@
-export type { SiteContent, MenuItem, BrandStory, SocialLink, HeroBlock } from '../src/types'
+export type {
+  SiteContent,
+  MenuItem,
+  BrandStory,
+  SocialLink,
+  HeroBlock,
+  HeroCanvas,
+  HeroCanvasElement,
+  HeroCanvasElementType,
+  HeroDeviceLayout,
+  NavLink,
+  NavBar,
+} from '../src/types'

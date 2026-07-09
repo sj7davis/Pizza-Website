@@ -77,4 +77,15 @@ export const content: SiteContent = {
   promoText: '',
   promoCode: '',
   theme: 'editorial-dark' as const,
+  heroCanvas: { enabled: false, desktopHeight: 560, mobileHeight: 620, elements: [] },
+  navbar: {
+    enabled: true,
+    showOrder: true,
+    links: [
+      { id: 'n1', label: 'Menu', href: '#menu' },
+      { id: 'n2', label: 'Our Story', href: '#story' },
+      { id: 'n3', label: 'Delivery', href: '#delivery' },
+    ],
+    canvas: { enabled: false, desktopHeight: 90, mobileHeight: 64, elements: [] },
+  },
 }
