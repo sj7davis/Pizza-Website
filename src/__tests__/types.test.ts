@@ -22,6 +22,7 @@ describe('types', () => {
       socials: [{ label: 'IG', href: '#' }],
       deliverySuburbs: [],
       heroImage: '/dough.jpg',
+      heroBlocks: [{ id: 'b1', type: 'heading', value: 'PBV' }],
       promoActive: false,
       promoText: '',
       promoCode: '',

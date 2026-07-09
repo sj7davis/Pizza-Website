@@ -11,6 +11,7 @@ const validInput = {
   socials: [{ label: 'Instagram', href: '#ig' }],
   deliverySuburbs: ['Airport West'],
   heroImage: '/dough.jpg',
+  heroBlocks: [{ id: 'b1', type: 'heading' as const, value: 'PBV' }],
   promoActive: false, promoText: '', promoCode: '',
   theme: 'editorial-dark' as const,
 }
@@ -33,6 +34,19 @@ describe('site router', () => {
     expect(arg.create.deliveryArea).toBe('Airport West')
     expect(arg.create.orderLinks).toEqual([{ label: 'Uber Eats', url: 'https://ubereats.com/pbv' }])
     expect(arg.update.storyHeading).toBe('h')
+  })
+
+  it('update round-trips heroBlocks', async () => {
+    const upsert = vi.fn().mockResolvedValue({ id: 1 })
+    const heroBlocks = [
+      { id: 'b1', type: 'eyebrow' as const, value: 'Eyebrow text' },
+      { id: 'b2', type: 'heading' as const, value: 'PBV' },
+      { id: 'b3', type: 'image' as const, url: '/pic.jpg', alt: 'A pizza', width: 'md' as const },
+    ]
+    await caller({ siteContent: { upsert } }).site.update({ ...validInput, heroBlocks })
+    const arg = upsert.mock.calls[0][0]
+    expect(arg.create.heroBlocks).toEqual(heroBlocks)
+    expect(arg.update.heroBlocks).toEqual(heroBlocks)
   })
 
   it('rejects invalid input (empty brandName)', async () => {

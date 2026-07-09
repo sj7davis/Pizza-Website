@@ -1,5 +1,5 @@
 import type { SiteContent, MenuItem } from '../shared/contract'
-import { paragraphsSchema, socialsSchema, orderLinksSchema, suburbsSchema, themeIdSchema } from './validation'
+import { paragraphsSchema, socialsSchema, orderLinksSchema, suburbsSchema, themeIdSchema, heroBlocksSchema } from './validation'
 
 export interface MenuItemRow {
   name: string
@@ -30,6 +30,7 @@ export interface SiteContentRow {
   socials: unknown
   deliverySuburbs: unknown
   heroImage: string
+  heroBlocks: unknown
   promoActive: boolean
   promoText: string
   promoCode: string
@@ -71,6 +72,7 @@ export function rowsToSiteContent(site: SiteContentRow, menuRows: MenuItemRow[])
     socials: socialsSchema.parse(site.socials),
     deliverySuburbs: suburbsSchema.parse(site.deliverySuburbs),
     heroImage: site.heroImage,
+    heroBlocks: heroBlocksSchema.parse(site.heroBlocks),
     promoActive: site.promoActive,
     promoText: site.promoText,
     promoCode: site.promoCode,

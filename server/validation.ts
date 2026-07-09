@@ -19,6 +19,43 @@ export const socialLinkSchema = z.object({ label: z.string().min(1), href: z.str
 export const orderLinkSchema = z.object({ label: z.string().min(1), url: z.string().min(1) })
 export const orderLinksSchema = z.array(orderLinkSchema)
 
+const heroBlockAlignSchema = z.enum(['left', 'center', 'right']).optional()
+
+export const heroBlockSchema = z.discriminatedUnion('type', [
+  z.object({ id: z.string().min(1), type: z.literal('eyebrow'), value: z.string(), align: heroBlockAlignSchema }),
+  z.object({ id: z.string().min(1), type: z.literal('heading'), value: z.string(), align: heroBlockAlignSchema }),
+  z.object({
+    id: z.string().min(1),
+    type: z.literal('text'),
+    value: z.string(),
+    align: heroBlockAlignSchema,
+    size: z.enum(['sm', 'md', 'lg']).optional(),
+  }),
+  z.object({
+    id: z.string().min(1),
+    type: z.literal('image'),
+    url: z.string(),
+    alt: z.string().optional(),
+    width: z.enum(['sm', 'md', 'lg', 'full']).optional(),
+    align: heroBlockAlignSchema,
+  }),
+  z.object({ id: z.string().min(1), type: z.literal('buttons'), align: heroBlockAlignSchema }),
+  z.object({ id: z.string().min(1), type: z.literal('status') }),
+  z.object({ id: z.string().min(1), type: z.literal('divider') }),
+])
+
+/** Permissive: drop entries that don't match the union rather than failing the whole parse. */
+export const heroBlocksSchema = z
+  .array(z.unknown())
+  .optional()
+  .default([])
+  .transform((arr) =>
+    (arr ?? [])
+      .map((item) => heroBlockSchema.safeParse(item))
+      .filter((r): r is { success: true; data: z.infer<typeof heroBlockSchema> } => r.success)
+      .map((r) => r.data),
+  )
+
 export const siteUpdateInput = z.object({
   brandName: z.string().min(1),
   tagline: z.string().min(1),
@@ -39,6 +76,7 @@ export const siteUpdateInput = z.object({
   socials: z.array(socialLinkSchema),
   deliverySuburbs: z.array(z.string()),
   heroImage: z.string().min(1),
+  heroBlocks: z.array(heroBlockSchema).default([]),
   promoActive: z.boolean(),
   promoText: z.string().max(160),
   promoCode: z.string().max(40),
