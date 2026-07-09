@@ -26,6 +26,7 @@ export default function App() {
         status={status}
         heroImage={content.heroImage}
         blocks={content.heroBlocks}
+        canvas={content.heroCanvas}
       />
       <Menu items={content.menu} />
       <Story story={content.story} />

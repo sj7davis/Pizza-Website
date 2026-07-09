@@ -27,6 +27,7 @@ describe('types', () => {
       promoText: '',
       promoCode: '',
       theme: 'editorial-dark' as const,
+      heroCanvas: { enabled: false, desktopHeight: 560, mobileHeight: 620, elements: [] },
     }
     expect(sample.menu[0].name).toBe('X')
     expect(sample.story.paragraphs).toHaveLength(1)

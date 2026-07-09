@@ -21,6 +21,10 @@ vi.mock('../ImageUploadField', () => ({
   ),
 }))
 
+vi.mock('react-rnd', () => ({
+  Rnd: ({ children }: { children: import('react').ReactNode }) => <div>{children}</div>,
+}))
+
 import { HeaderBuilder } from '../HeaderBuilder'
 
 beforeEach(() => {
@@ -40,6 +44,7 @@ beforeEach(() => {
       { id: 'b1', type: 'eyebrow', value: 'Pizza by Backhaus · Delivered' },
       { id: 'b2', type: 'heading', value: 'PBB' },
     ],
+    heroCanvas: { enabled: false, desktopHeight: 560, mobileHeight: 620, elements: [] },
     promoActive: false,
     promoText: '',
     promoCode: '',
@@ -80,5 +85,28 @@ describe('HeaderBuilder', () => {
     expect(arg.brandName).toBe('PBB')
     expect(arg.orderLinks).toEqual([{ label: 'Uber Eats', url: '#ue' }])
     expect(await screen.findByText(/saved/i)).toBeInTheDocument()
+  })
+
+  it('switches to freeform canvas mode and back', () => {
+    render(<HeaderBuilder />)
+    fireEvent.click(screen.getByRole('button', { name: /freeform canvas/i }))
+    expect(screen.getByLabelText(/enable freeform header/i)).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: /stacked blocks/i }))
+    expect(screen.getAllByRole('listitem')).toHaveLength(2)
+  })
+
+  it('saves heroCanvas alongside the rest of the payload', async () => {
+    render(<HeaderBuilder />)
+    fireEvent.click(screen.getByRole('button', { name: /freeform canvas/i }))
+    fireEvent.click(screen.getByLabelText(/enable freeform header/i))
+    fireEvent.click(screen.getByRole('button', { name: /\+ text/i }))
+    fireEvent.click(screen.getByRole('button', { name: /^save$/i }))
+    await waitFor(() => expect(updateMutate).toHaveBeenCalled())
+    const arg = updateMutate.mock.calls[0][0]
+    expect(arg.heroCanvas.enabled).toBe(true)
+    expect(arg.heroCanvas.elements).toHaveLength(1)
+    expect(arg.heroCanvas.elements[0].type).toBe('text')
+    // full payload still includes site fields
+    expect(arg.brandName).toBe('PBB')
   })
 })

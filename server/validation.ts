@@ -56,6 +56,45 @@ export const heroBlocksSchema = z
       .map((r) => r.data),
   )
 
+const heroCanvasDeviceLayoutSchema = z.object({
+  x: z.number().min(0).max(100),
+  y: z.number().min(0).max(100),
+  w: z.number().min(0).max(100),
+  align: z.enum(['left', 'center', 'right']).optional(),
+  fontSize: z.number().positive().optional(),
+  hidden: z.boolean().optional(),
+})
+
+export const heroCanvasElementSchema = z.object({
+  id: z.string().min(1),
+  type: z.enum(['heading', 'text', 'image', 'buttons', 'logo', 'status', 'divider']),
+  value: z.string().optional(),
+  url: z.string().optional(),
+  alt: z.string().optional(),
+  desktop: heroCanvasDeviceLayoutSchema,
+  mobile: heroCanvasDeviceLayoutSchema,
+})
+
+/** Permissive: drop entries that don't match the shape rather than failing the whole parse. */
+export const heroCanvasSchema = z
+  .object({
+    enabled: z.boolean().optional().default(false),
+    desktopHeight: z.number().positive().optional().default(560),
+    mobileHeight: z.number().positive().optional().default(620),
+    elements: z.array(z.unknown()).optional().default([]),
+  })
+  .optional()
+  .default({ enabled: false, desktopHeight: 560, mobileHeight: 620, elements: [] })
+  .transform((canvas) => ({
+    enabled: canvas.enabled ?? false,
+    desktopHeight: canvas.desktopHeight ?? 560,
+    mobileHeight: canvas.mobileHeight ?? 620,
+    elements: (canvas.elements ?? [])
+      .map((item) => heroCanvasElementSchema.safeParse(item))
+      .filter((r): r is { success: true; data: z.infer<typeof heroCanvasElementSchema> } => r.success)
+      .map((r) => r.data),
+  }))
+
 export const siteUpdateInput = z.object({
   brandName: z.string().min(1),
   tagline: z.string().min(1),
@@ -77,6 +116,7 @@ export const siteUpdateInput = z.object({
   deliverySuburbs: z.array(z.string()),
   heroImage: z.string().min(1),
   heroBlocks: z.array(heroBlockSchema).default([]),
+  heroCanvas: heroCanvasSchema,
   promoActive: z.boolean(),
   promoText: z.string().max(160),
   promoCode: z.string().max(40),

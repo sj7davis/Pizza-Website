@@ -53,6 +53,34 @@ export type HeroBlock =
   | { id: string; type: 'status' }
   | { id: string; type: 'divider' }
 
+export type HeroCanvasElementType = 'heading' | 'text' | 'image' | 'buttons' | 'logo' | 'status' | 'divider'
+
+export interface HeroDeviceLayout {
+  x: number
+  y: number
+  w: number
+  align?: 'left' | 'center' | 'right'
+  fontSize?: number
+  hidden?: boolean
+}
+
+export interface HeroCanvasElement {
+  id: string
+  type: HeroCanvasElementType
+  value?: string
+  url?: string
+  alt?: string
+  desktop: HeroDeviceLayout
+  mobile: HeroDeviceLayout
+}
+
+export interface HeroCanvas {
+  enabled: boolean
+  desktopHeight: number
+  mobileHeight: number
+  elements: HeroCanvasElement[]
+}
+
 export interface SiteContent {
   brandName: string
   tagline: string
@@ -78,4 +106,6 @@ export interface SiteContent {
   theme: ThemeId
   /** Ordered hero/header blocks. Empty/undefined falls back to the classic hardcoded hero layout. */
   heroBlocks: HeroBlock[]
+  /** Freeform hero canvas (Elementor-style). Takes precedence over heroBlocks when enabled with elements. */
+  heroCanvas: HeroCanvas
 }

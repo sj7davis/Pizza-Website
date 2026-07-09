@@ -43,6 +43,7 @@ model SiteContent {
   deliverySuburbs  String[] @default([])
   heroImage        String   @default("/dough.jpg")
   heroBlocks       Json     @default("[]")
+  heroCanvas       Json     @default("{\"enabled\":false,\"desktopHeight\":560,\"mobileHeight\":620,\"elements\":[]}")
   promoActive      Boolean  @default(false)
   promoText        String   @default("")
   promoCode        String   @default("")

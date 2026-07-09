@@ -49,6 +49,35 @@ describe('site router', () => {
     expect(arg.update.heroBlocks).toEqual(heroBlocks)
   })
 
+  it('update round-trips heroCanvas', async () => {
+    const upsert = vi.fn().mockResolvedValue({ id: 1 })
+    const heroCanvas = {
+      enabled: true,
+      desktopHeight: 600,
+      mobileHeight: 640,
+      elements: [
+        {
+          id: 'e1',
+          type: 'heading' as const,
+          value: 'PBV',
+          desktop: { x: 10, y: 10, w: 60, align: 'left' as const, fontSize: 48 },
+          mobile: { x: 5, y: 5, w: 90, align: 'center' as const, fontSize: 32 },
+        },
+      ],
+    }
+    await caller({ siteContent: { upsert } }).site.update({ ...validInput, heroCanvas })
+    const arg = upsert.mock.calls[0][0]
+    expect(arg.create.heroCanvas).toEqual(heroCanvas)
+    expect(arg.update.heroCanvas).toEqual(heroCanvas)
+  })
+
+  it('defaults heroCanvas to disabled/empty when omitted', async () => {
+    const upsert = vi.fn().mockResolvedValue({ id: 1 })
+    await caller({ siteContent: { upsert } }).site.update(validInput)
+    const arg = upsert.mock.calls[0][0]
+    expect(arg.create.heroCanvas).toEqual({ enabled: false, desktopHeight: 560, mobileHeight: 620, elements: [] })
+  })
+
   it('rejects invalid input (empty brandName)', async () => {
     await expect(
       caller({ siteContent: { upsert: vi.fn() } }).site.update({ ...validInput, brandName: '' }),

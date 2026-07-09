@@ -20,7 +20,8 @@ import { trpc } from '../lib/trpc'
 import { content } from '../content'
 import { ImageUploadField } from './ImageUploadField'
 import { SaveStatus, type SaveState } from './SaveStatus'
-import type { HeroBlock, HeroBlockAlign } from '../types'
+import { HeroCanvasEditor } from './HeroCanvasEditor'
+import type { HeroBlock, HeroBlockAlign, HeroCanvas } from '../types'
 import type { ThemeId } from '../lib/themes'
 
 interface SocialRow { label: string; href: string }
@@ -46,13 +47,16 @@ interface SiteRow {
   deliverySuburbs: string[]
   heroImage: string
   heroBlocks: HeroBlock[]
+  heroCanvas: HeroCanvas
   promoActive: boolean
   promoText: string
   promoCode: string
   theme: string
 }
 
-function siteRowToInput(r: SiteRow, heroBlocks: HeroBlock[]) {
+const DEFAULT_CANVAS: HeroCanvas = { enabled: false, desktopHeight: 560, mobileHeight: 620, elements: [] }
+
+function siteRowToInput(r: SiteRow, heroBlocks: HeroBlock[], heroCanvas: HeroCanvas) {
   return {
     brandName: r.brandName,
     tagline: r.tagline,
@@ -74,6 +78,7 @@ function siteRowToInput(r: SiteRow, heroBlocks: HeroBlock[]) {
     deliverySuburbs: r.deliverySuburbs,
     heroImage: r.heroImage,
     heroBlocks,
+    heroCanvas,
     promoActive: r.promoActive,
     promoText: r.promoText,
     promoCode: r.promoCode,
@@ -234,6 +239,8 @@ export function HeaderBuilder() {
   const get = trpc.site.get.useQuery()
   const update = trpc.site.update.useMutation({ onSuccess: () => utils.site.get.invalidate() })
   const [blocks, setBlocks] = useState<HeroBlock[] | null>(null)
+  const [canvas, setCanvas] = useState<HeroCanvas | null>(null)
+  const [mode, setMode] = useState<'stacked' | 'freeform'>('stacked')
   const [save, setSave] = useState<SaveState>({ status: 'idle' })
 
   const sensors = useSensors(
@@ -246,9 +253,15 @@ export function HeaderBuilder() {
   if (!siteData) return <p>No site content yet — seed the database first.</p>
 
   const list = blocks ?? siteData.heroBlocks ?? []
+  const canvasState = canvas ?? siteData.heroCanvas ?? DEFAULT_CANVAS
 
   function setList(next: HeroBlock[]) {
     setBlocks(next)
+    setSave({ status: 'idle' })
+  }
+
+  function setCanvasState(next: HeroCanvas) {
+    setCanvas(next)
     setSave({ status: 'idle' })
   }
 
@@ -275,7 +288,7 @@ export function HeaderBuilder() {
   async function handleSave() {
     setSave({ status: 'saving' })
     try {
-      await update.mutateAsync(siteRowToInput(siteData!, list))
+      await update.mutateAsync(siteRowToInput(siteData!, list, canvasState))
       setSave({ status: 'saved' })
     } catch {
       setSave({ status: 'error', message: 'Could not save — check the blocks and try again.' })
@@ -293,47 +306,68 @@ export function HeaderBuilder() {
           </button>
         </div>
       </div>
-      <p className="admin-muted">
-        Compose the hero shown at the top of the site. Drag to reorder blocks; leave empty to use the classic layout.
-      </p>
 
-      {list.length === 0 && (
-        <div className="admin-muted">
-          <p>No blocks yet — the site is using the default hero layout. Add blocks below, or start from the current design and edit it:</p>
-          <button
-            type="button"
-            onClick={() => setBlocks(content.heroBlocks.map((b) => ({ ...b })))}
-          >
-            Start from the current layout
-          </button>
-        </div>
+      <div className="admin-actions" style={{ marginBottom: 14 }}>
+        <button type="button" onClick={() => setMode('stacked')} aria-pressed={mode === 'stacked'}>
+          Stacked blocks
+        </button>
+        <button type="button" onClick={() => setMode('freeform')} aria-pressed={mode === 'freeform'}>
+          Freeform canvas
+        </button>
+      </div>
+
+      {mode === 'freeform' ? (
+        <HeroCanvasEditor
+          canvas={canvasState}
+          heroImage={siteData.heroImage}
+          brandName={siteData.brandName}
+          onChange={setCanvasState}
+        />
+      ) : (
+        <>
+          <p className="admin-muted">
+            Compose the hero shown at the top of the site. Drag to reorder blocks; leave empty to use the classic layout.
+          </p>
+
+          {list.length === 0 && (
+            <div className="admin-muted">
+              <p>No blocks yet — the site is using the default hero layout. Add blocks below, or start from the current design and edit it:</p>
+              <button
+                type="button"
+                onClick={() => setBlocks(content.heroBlocks.map((b) => ({ ...b })))}
+              >
+                Start from the current layout
+              </button>
+            </div>
+          )}
+
+          <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+            <SortableContext items={list.map((b) => b.id)} strategy={verticalListSortingStrategy}>
+              <ul className="admin-list">
+                {list.map((block) => (
+                  <SortableBlockCard
+                    key={block.id}
+                    block={block}
+                    onChange={(next) => updateBlock(block.id, next)}
+                    onDelete={() => deleteBlock(block.id)}
+                  />
+                ))}
+              </ul>
+            </SortableContext>
+          </DndContext>
+
+          <fieldset className="admin-fieldset">
+            <legend>Add block</legend>
+            <div className="admin-actions">
+              {(Object.keys(BLOCK_LABELS) as HeroBlock['type'][]).map((type) => (
+                <button type="button" key={type} onClick={() => addBlock(type)}>
+                  + {BLOCK_LABELS[type]}
+                </button>
+              ))}
+            </div>
+          </fieldset>
+        </>
       )}
-
-      <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-        <SortableContext items={list.map((b) => b.id)} strategy={verticalListSortingStrategy}>
-          <ul className="admin-list">
-            {list.map((block) => (
-              <SortableBlockCard
-                key={block.id}
-                block={block}
-                onChange={(next) => updateBlock(block.id, next)}
-                onDelete={() => deleteBlock(block.id)}
-              />
-            ))}
-          </ul>
-        </SortableContext>
-      </DndContext>
-
-      <fieldset className="admin-fieldset">
-        <legend>Add block</legend>
-        <div className="admin-actions">
-          {(Object.keys(BLOCK_LABELS) as HeroBlock['type'][]).map((type) => (
-            <button type="button" key={type} onClick={() => addBlock(type)}>
-              + {BLOCK_LABELS[type]}
-            </button>
-          ))}
-        </div>
-      </fieldset>
     </section>
   )
 }

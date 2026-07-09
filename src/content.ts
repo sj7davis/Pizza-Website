@@ -77,4 +77,5 @@ export const content: SiteContent = {
   promoText: '',
   promoCode: '',
   theme: 'editorial-dark' as const,
+  heroCanvas: { enabled: false, desktopHeight: 560, mobileHeight: 620, elements: [] },
 }

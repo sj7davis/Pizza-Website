@@ -1,10 +1,12 @@
+import type { CSSProperties, ReactNode } from 'react'
 import { motion, useReducedMotion } from 'motion/react'
 import { Logo } from './Logo'
 import { OrderButton } from './OrderButton'
 import { OrderStatus } from './OrderStatus'
 import type { OpenStatus } from '../lib/openStatus'
-import type { HeroBlock } from '../types'
+import type { HeroBlock, HeroCanvas, HeroCanvasElement, HeroDeviceLayout } from '../types'
 import { trpc } from '../lib/trpc'
+import { useMediaQuery } from '../lib/useMediaQuery'
 import './Hero.css'
 
 interface HeroProps {
@@ -15,6 +17,7 @@ interface HeroProps {
   status?: OpenStatus
   heroImage?: string
   blocks?: HeroBlock[]
+  canvas?: HeroCanvas
 }
 
 const easing = [0.22, 1, 0.36, 1] as const
@@ -22,8 +25,9 @@ const easing = [0.22, 1, 0.36, 1] as const
 const alignClass = (align?: 'left' | 'center' | 'right') =>
   align && align !== 'left' ? `hero__align-${align}` : ''
 
-export function Hero({ brandName, tagline, orderLinks, ordersDisabled, status, heroImage, blocks }: HeroProps) {
+export function Hero({ brandName, tagline, orderLinks, ordersDisabled, status, heroImage, blocks, canvas }: HeroProps) {
   const reduce = useReducedMotion()
+  const isMobile = useMediaQuery('(max-width: 767px)')
   const orderClick = trpc.analytics.orderClick.useMutation()
   const step = (i: number) =>
     reduce
@@ -48,6 +52,60 @@ export function Hero({ brandName, tagline, orderLinks, ordersDisabled, status, h
       ))}
     </div>
   )
+
+  function renderCanvasElement(el: HeroCanvasElement, i: number) {
+    const layout: HeroDeviceLayout = isMobile ? el.mobile : el.desktop
+    if (layout.hidden) return null
+    const style: CSSProperties = {
+      position: 'absolute',
+      left: `${layout.x}%`,
+      top: `${layout.y}%`,
+      width: `${layout.w}%`,
+      textAlign: layout.align ?? 'left',
+    }
+    const textStyle: CSSProperties = layout.fontSize ? { fontSize: `${layout.fontSize}px` } : {}
+
+    let content: ReactNode
+    switch (el.type) {
+      case 'heading':
+        content = (
+          <h1 className="hero__logo" style={textStyle}>
+            <Logo text={el.value ?? ''} />
+          </h1>
+        )
+        break
+      case 'text':
+        content = (
+          <p className="hero-canvas__text" style={textStyle}>
+            {el.value}
+          </p>
+        )
+        break
+      case 'image':
+        content = <img className="hero-canvas__image" src={el.url} alt={el.alt ?? ''} loading="lazy" />
+        break
+      case 'buttons':
+        content = orderButtons(layout.align)
+        break
+      case 'status':
+        content = status ? <OrderStatus status={status} /> : null
+        break
+      case 'logo':
+        content = <Logo text={brandName} />
+        break
+      case 'divider':
+        content = <div className="hero__line" aria-hidden="true" />
+        break
+      default:
+        content = null
+    }
+
+    return (
+      <motion.div key={el.id} className="hero-canvas__el" style={style} {...step(i)}>
+        {content}
+      </motion.div>
+    )
+  }
 
   function renderBlock(block: HeroBlock, i: number) {
     switch (block.type) {
@@ -113,37 +171,46 @@ export function Hero({ brandName, tagline, orderLinks, ordersDisabled, status, h
       style={heroImage ? { backgroundImage: `linear-gradient(rgba(18,17,13,0.5), rgba(18,17,13,0.7)), url(${heroImage})` } : undefined}
     >
       <div className="hero__grain" aria-hidden="true" />
-      <div className="container hero__inner">
-        {blocks && blocks.length > 0 ? (
-          blocks.map((block, i) => renderBlock(block, i + 1))
-        ) : (
-          <>
-            <div className="label hero__eyebrow">Pizza by Backhaus · Delivered</div>
-            <motion.h1 className="hero__logo" {...step(1)}>
-              <Logo text={brandName} />
-            </motion.h1>
-            <motion.p className="hero__tagline" {...step(2)}>{tagline}</motion.p>
-            <motion.div className="hero__line" {...step(3)} aria-hidden="true" />
-            {status && (
-              <div className="hero__status">
-                <OrderStatus status={status} />
-              </div>
-            )}
-            <motion.div className="hero__orders" {...step(4)}>
-              {orderLinks.map((link, i) => (
-                <OrderButton
-                  key={link.label}
-                  label={`Order on ${link.label}`}
-                  url={link.url}
-                  variant={i === 0 ? 'solid' : 'ghost'}
-                  disabled={ordersDisabled}
-                  onOrder={() => orderClick.mutate({ platform: link.label })}
-                />
-              ))}
-            </motion.div>
-          </>
-        )}
-      </div>
+      {canvas?.enabled && canvas.elements.length > 0 ? (
+        <div
+          className="hero-canvas"
+          style={{ height: isMobile ? canvas.mobileHeight : canvas.desktopHeight }}
+        >
+          {canvas.elements.map((el, i) => renderCanvasElement(el, i + 1))}
+        </div>
+      ) : (
+        <div className="container hero__inner">
+          {blocks && blocks.length > 0 ? (
+            blocks.map((block, i) => renderBlock(block, i + 1))
+          ) : (
+            <>
+              <div className="label hero__eyebrow">Pizza by Backhaus · Delivered</div>
+              <motion.h1 className="hero__logo" {...step(1)}>
+                <Logo text={brandName} />
+              </motion.h1>
+              <motion.p className="hero__tagline" {...step(2)}>{tagline}</motion.p>
+              <motion.div className="hero__line" {...step(3)} aria-hidden="true" />
+              {status && (
+                <div className="hero__status">
+                  <OrderStatus status={status} />
+                </div>
+              )}
+              <motion.div className="hero__orders" {...step(4)}>
+                {orderLinks.map((link, i) => (
+                  <OrderButton
+                    key={link.label}
+                    label={`Order on ${link.label}`}
+                    url={link.url}
+                    variant={i === 0 ? 'solid' : 'ghost'}
+                    disabled={ordersDisabled}
+                    onOrder={() => orderClick.mutate({ platform: link.label })}
+                  />
+                ))}
+              </motion.div>
+            </>
+          )}
+        </div>
+      )}
 
       <a className="hero__scroll" href="#menu" aria-label="Scroll to the menu">
         <span className="hero__scroll-label">Scroll</span>
