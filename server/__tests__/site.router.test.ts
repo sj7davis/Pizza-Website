@@ -126,6 +126,7 @@ describe('site router', () => {
         { id: 'n1', label: 'Menu', href: '#menu' },
         { id: 'n2', label: 'Our Story', href: '#story' },
       ],
+      canvas: { enabled: false, desktopHeight: 90, mobileHeight: 64, elements: [] },
     }
     await caller({ siteContent: { upsert } }).site.update({ ...validInput, navbar })
     const arg = upsert.mock.calls[0][0]
@@ -145,6 +146,43 @@ describe('site router', () => {
         { id: 'n2', label: 'Our Story', href: '#story' },
         { id: 'n3', label: 'Delivery', href: '#delivery' },
       ],
+      canvas: { enabled: false, desktopHeight: 90, mobileHeight: 64, elements: [] },
     })
+  })
+
+  it('round-trips navbar.canvas with multiple image elements and per-device layouts', async () => {
+    const upsert = vi.fn().mockResolvedValue({ id: 1 })
+    const navbar = {
+      enabled: true,
+      showOrder: true,
+      links: [],
+      canvas: {
+        enabled: true,
+        desktopHeight: 100,
+        mobileHeight: 70,
+        elements: [
+          {
+            id: 'e1',
+            type: 'image',
+            url: '/promo1.jpg',
+            alt: 'Promo one',
+            desktop: { x: 0, y: 0, w: 20 },
+            mobile: { x: 0, y: 0, w: 40 },
+          },
+          {
+            id: 'e2',
+            type: 'image',
+            url: '/promo2.jpg',
+            alt: 'Promo two',
+            desktop: { x: 25, y: 0, w: 20, hidden: true },
+            mobile: { x: 45, y: 0, w: 40 },
+          },
+        ],
+      },
+    }
+    await caller({ siteContent: { upsert } }).site.update({ ...validInput, navbar })
+    const arg = upsert.mock.calls[0][0]
+    expect(arg.create.navbar.canvas.elements).toHaveLength(2)
+    expect(arg.create.navbar.canvas.elements[1].desktop.hidden).toBe(true)
   })
 })

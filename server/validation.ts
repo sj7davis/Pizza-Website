@@ -101,6 +101,9 @@ export const navLinkSchema = z.object({
   href: z.string(),
 })
 
+const DEFAULT_NAVBAR_CANVAS: { enabled: boolean; desktopHeight: number; mobileHeight: number; elements: z.infer<typeof heroCanvasElementSchema>[] } =
+  { enabled: false, desktopHeight: 90, mobileHeight: 64, elements: [] }
+
 const DEFAULT_NAVBAR = {
   enabled: true,
   showOrder: true,
@@ -109,7 +112,28 @@ const DEFAULT_NAVBAR = {
     { id: 'n2', label: 'Our Story', href: '#story' },
     { id: 'n3', label: 'Delivery', href: '#delivery' },
   ],
+  canvas: DEFAULT_NAVBAR_CANVAS,
 }
+
+/** Same shape as heroCanvasSchema, but with the nav bar's own (much shorter) default heights. */
+const navCanvasSchema = z
+  .object({
+    enabled: z.boolean().optional().default(false),
+    desktopHeight: z.number().positive().optional().default(90),
+    mobileHeight: z.number().positive().optional().default(64),
+    elements: z.array(z.unknown()).optional().default([]),
+  })
+  .optional()
+  .default(DEFAULT_NAVBAR_CANVAS)
+  .transform((canvas) => ({
+    enabled: canvas.enabled ?? false,
+    desktopHeight: canvas.desktopHeight ?? 90,
+    mobileHeight: canvas.mobileHeight ?? 64,
+    elements: (canvas.elements ?? [])
+      .map((item) => heroCanvasElementSchema.safeParse(item))
+      .filter((r): r is { success: true; data: z.infer<typeof heroCanvasElementSchema> } => r.success)
+      .map((r) => r.data),
+  }))
 
 /** Permissive: coerce/validate; drop link entries that don't match the shape. */
 export const navbarSchema = z
@@ -117,6 +141,7 @@ export const navbarSchema = z
     enabled: z.boolean().optional().default(true),
     showOrder: z.boolean().optional().default(true),
     links: z.array(z.unknown()).optional().default(DEFAULT_NAVBAR.links),
+    canvas: navCanvasSchema,
   })
   .optional()
   .default(DEFAULT_NAVBAR)
@@ -127,6 +152,7 @@ export const navbarSchema = z
       .map((item) => navLinkSchema.safeParse(item))
       .filter((r): r is { success: true; data: z.infer<typeof navLinkSchema> } => r.success)
       .map((r) => r.data),
+    canvas: navbar.canvas ?? DEFAULT_NAVBAR_CANVAS,
   }))
 
 export const siteUpdateInput = z.object({

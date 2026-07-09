@@ -22,6 +22,7 @@ export default function App() {
         navbar={content.navbar}
         orderLinks={content.orderLinks}
         ordersDisabled={ordersDisabled}
+        status={status}
       />
       <PromoBanner />
       <StatusBanner status={status} />

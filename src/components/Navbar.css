@@ -116,3 +116,43 @@
 #delivery {
   scroll-margin-top: 64px;
 }
+
+/* Freeform canvas nav banner */
+.navbar--canvas {
+  padding: 0;
+}
+
+.navbar-canvas {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.navbar-canvas__el {
+  position: absolute;
+}
+
+.navbar-canvas__text {
+  margin: 0;
+  font-family: var(--font-ui);
+  color: var(--ink);
+}
+
+.navbar-canvas__image {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.navbar-canvas__orders {
+  display: flex;
+  gap: 12px;
+}
+.navbar-canvas__orders--center { justify-content: center; }
+.navbar-canvas__orders--right { justify-content: flex-end; }
+
+.navbar-canvas__divider {
+  width: 100%;
+  height: 1px;
+  background: var(--hairline);
+}

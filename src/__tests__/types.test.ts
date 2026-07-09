@@ -32,6 +32,7 @@ describe('types', () => {
         enabled: true,
         showOrder: true,
         links: [{ id: 'n1', label: 'Menu', href: '#menu' }],
+        canvas: { enabled: false, desktopHeight: 90, mobileHeight: 64, elements: [] },
       },
     }
     expect(sample.menu[0].name).toBe('X')

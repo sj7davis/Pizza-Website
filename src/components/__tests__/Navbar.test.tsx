@@ -2,12 +2,14 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { Navbar } from '../Navbar'
 import { TestProviders } from '../../test/providers'
-import type { NavBar } from '../../types'
+import type { HeroCanvas, NavBar } from '../../types'
 
 const mediaQueryMock = vi.fn((_query: string) => false)
 vi.mock('../../lib/useMediaQuery', () => ({
   useMediaQuery: (q: string) => mediaQueryMock(q),
 }))
+
+const disabledCanvas: HeroCanvas = { enabled: false, desktopHeight: 90, mobileHeight: 64, elements: [] }
 
 const navbar: NavBar = {
   enabled: true,
@@ -17,6 +19,7 @@ const navbar: NavBar = {
     { id: 'n2', label: 'Our Story', href: '#story' },
     { id: 'n3', label: 'Delivery', href: '#delivery' },
   ],
+  canvas: disabledCanvas,
 }
 
 beforeEach(() => {
@@ -78,5 +81,63 @@ describe('Navbar', () => {
 
     fireEvent.click(menuLink)
     expect(screen.queryByRole('link', { name: 'Menu' })).toBeNull()
+  })
+
+  describe('freeform canvas mode', () => {
+    const canvasNavbar: NavBar = {
+      ...navbar,
+      canvas: {
+        enabled: true,
+        desktopHeight: 90,
+        mobileHeight: 64,
+        elements: [
+          {
+            id: 'img1',
+            type: 'image',
+            url: '/promo1.jpg',
+            alt: 'Promo one',
+            desktop: { x: 0, y: 0, w: 20 },
+            mobile: { x: 0, y: 0, w: 40 },
+          },
+          {
+            id: 'img2',
+            type: 'image',
+            url: '/promo2.jpg',
+            alt: 'Promo two',
+            desktop: { x: 25, y: 0, w: 20 },
+            mobile: { x: 45, y: 0, w: 40 },
+          },
+        ],
+      },
+    }
+
+    it('renders the freeform banner with multiple images and not the simple links', () => {
+      render(
+        <Navbar brandName="PBB" navbar={canvasNavbar} orderLinks={[{ label: 'Uber Eats', url: '#ue' }]} />,
+        { wrapper: TestProviders },
+      )
+      expect(screen.getByRole('img', { name: 'Promo one' })).toBeInTheDocument()
+      expect(screen.getByRole('img', { name: 'Promo two' })).toBeInTheDocument()
+      expect(screen.queryByRole('link', { name: 'Menu' })).toBeNull()
+      expect(screen.queryByRole('link', { name: 'Our Story' })).toBeNull()
+    })
+
+    it('falls back to the simple bar when canvas is disabled', () => {
+      render(
+        <Navbar brandName="PBB" navbar={navbar} orderLinks={[{ label: 'Uber Eats', url: '#ue' }]} />,
+        { wrapper: TestProviders },
+      )
+      expect(screen.getByRole('link', { name: 'Menu' })).toBeInTheDocument()
+      expect(screen.queryByRole('img', { name: 'Promo one' })).toBeNull()
+    })
+
+    it('falls back to the simple bar when canvas has no elements even if enabled', () => {
+      const emptyCanvasNavbar: NavBar = { ...navbar, canvas: { ...disabledCanvas, enabled: true } }
+      render(
+        <Navbar brandName="PBB" navbar={emptyCanvasNavbar} orderLinks={[{ label: 'Uber Eats', url: '#ue' }]} />,
+        { wrapper: TestProviders },
+      )
+      expect(screen.getByRole('link', { name: 'Menu' })).toBeInTheDocument()
+    })
   })
 })

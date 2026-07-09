@@ -86,5 +86,6 @@ export const content: SiteContent = {
       { id: 'n2', label: 'Our Story', href: '#story' },
       { id: 'n3', label: 'Delivery', href: '#delivery' },
     ],
+    canvas: { enabled: false, desktopHeight: 90, mobileHeight: 64, elements: [] },
   },
 }

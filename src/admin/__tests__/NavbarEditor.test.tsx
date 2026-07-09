@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import type { ReactNode } from 'react'
 
 const getState = { data: undefined as unknown, isLoading: false }
 const updateMutate = vi.fn().mockResolvedValue({})
@@ -13,6 +14,20 @@ vi.mock('../../lib/trpc', () => ({
       update: { useMutation: () => ({ mutateAsync: updateMutate, isPending: false }) },
     },
   },
+}))
+
+vi.mock('react-rnd', () => ({
+  Rnd: ({ children, onClick }: { children: ReactNode; onClick?: () => void }) => (
+    <div data-testid="rnd-el" onClick={onClick}>
+      {children}
+    </div>
+  ),
+}))
+
+vi.mock('../ImageUploadField', () => ({
+  ImageUploadField: ({ onChange }: { onChange: (url: string | null) => void }) => (
+    <button type="button" onClick={() => onChange('/test.jpg')}>image-field</button>
+  ),
 }))
 
 import { NavbarEditor } from '../NavbarEditor'
@@ -42,6 +57,7 @@ beforeEach(() => {
         { id: 'n1', label: 'Menu', href: '#menu' },
         { id: 'n2', label: 'Our Story', href: '#story' },
       ],
+      canvas: { enabled: false, desktopHeight: 90, mobileHeight: 64, elements: [] },
     },
     promoActive: false,
     promoText: '',
@@ -94,5 +110,30 @@ describe('NavbarEditor', () => {
     // full payload includes existing site fields
     expect(arg.brandName).toBe('PBB')
     expect(await screen.findByText(/saved/i)).toBeInTheDocument()
+  })
+
+  it('switching to Freeform mode shows the canvas editor and hides the simple link list', () => {
+    render(<NavbarEditor />)
+    expect(screen.getByText(/links/i)).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: /freeform canvas/i }))
+    expect(screen.getByLabelText(/enable freeform header/i)).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /\+ add link/i })).toBeNull()
+  })
+
+  it('switching back to Simple bar restores the link list', () => {
+    render(<NavbarEditor />)
+    fireEvent.click(screen.getByRole('button', { name: /freeform canvas/i }))
+    fireEvent.click(screen.getByRole('button', { name: /^simple bar$/i }))
+    expect(screen.getByRole('button', { name: /\+ add link/i })).toBeInTheDocument()
+  })
+
+  it('save includes navbar.canvas when saving in Freeform mode', async () => {
+    render(<NavbarEditor />)
+    fireEvent.click(screen.getByRole('button', { name: /freeform canvas/i }))
+    fireEvent.click(screen.getByRole('button', { name: /^save$/i }))
+    await waitFor(() => expect(updateMutate).toHaveBeenCalled())
+    const arg = updateMutate.mock.calls[0][0]
+    expect(arg.navbar.canvas).toBeDefined()
+    expect(arg.navbar.canvas.enabled).toBe(true)
   })
 })

@@ -91,6 +91,8 @@ export interface NavBar {
   enabled: boolean
   links: NavLink[]
   showOrder: boolean
+  /** Freeform nav canvas (multi-image top banner). Takes precedence over the simple bar when enabled with elements. */
+  canvas: HeroCanvas
 }
 
 export interface SiteContent {
