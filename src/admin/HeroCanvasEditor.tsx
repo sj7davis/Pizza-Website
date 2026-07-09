@@ -1,4 +1,4 @@
-import { useRef, useState, type CSSProperties } from 'react'
+import { useLayoutEffect, useRef, useState, type CSSProperties } from 'react'
 import { Rnd } from 'react-rnd'
 import { ImageUploadField } from './ImageUploadField'
 import type { HeroCanvas, HeroCanvasElement, HeroCanvasElementType, HeroDeviceLayout } from '../types'
@@ -57,8 +57,24 @@ export function HeroCanvasEditor({ canvas, heroImage, brandName, onChange }: Pro
   const [device, setDevice] = useState<'desktop' | 'mobile'>('desktop')
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const canvasRef = useRef<HTMLDivElement | null>(null)
+  // Measure the real canvas width into state and keep it in sync (it changes when
+  // toggling desktop/mobile, and on window resize). Using one measured value for
+  // BOTH placing elements and reading drag coordinates keeps a single, consistent
+  // coordinate system — otherwise placement used a 1000px fallback while drags read
+  // the real width, making elements jump and layouts behave erratically.
+  const [surfaceW, setSurfaceW] = useState(0)
+  useLayoutEffect(() => {
+    const el = canvasRef.current
+    if (!el) return
+    const measure = () => setSurfaceW(el.getBoundingClientRect().width)
+    measure()
+    const ro = new ResizeObserver(measure)
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [device])
 
   const height = device === 'desktop' ? canvas.desktopHeight : canvas.mobileHeight
+  const totalW = surfaceW || (device === 'desktop' ? 1000 : 375)
   const selected = canvas.elements.find((el) => el.id === selectedId) ?? null
 
   function update(partial: Partial<HeroCanvas>) {
@@ -98,8 +114,6 @@ export function HeroCanvasEditor({ canvas, heroImage, brandName, onChange }: Pro
   }
 
   function handleDragResize(id: string, xPx: number, yPx: number, wPx: number) {
-    const rect = canvasRef.current?.getBoundingClientRect()
-    const totalW = rect?.width ?? 1
     const totalH = height || 1
     updateLayout(id, {
       x: pxToPercent(xPx, totalW),
@@ -175,19 +189,17 @@ export function HeroCanvasEditor({ canvas, heroImage, brandName, onChange }: Pro
       >
         {canvas.elements.map((el) => {
           const layout = el[device]
-          const rect = canvasRef.current?.getBoundingClientRect()
-          const totalW = rect?.width ?? (device === 'desktop' ? 1000 : 375)
           const xPx = (layout.x / 100) * totalW
           const yPx = (layout.y / 100) * height
           const wPx = (layout.w / 100) * totalW
           return (
-            // Uncontrolled (default) + per-device key: each device mounts fresh
-            // from its own layout and manages its own drag internally, so Desktop
-            // and Mobile stay fully independent. (Controlled position/size made
-            // react-rnd re-sync across the device switch and bleed one into the other.)
+            // Controlled position/size driven by the measured surface width, keyed
+            // per device so switching Desktop/Mobile shows each layout independently
+            // from a single, consistent coordinate system.
             <Rnd
               key={`${el.id}-${device}`}
-              default={{ x: xPx, y: yPx, width: wPx, height: 'auto' }}
+              position={{ x: xPx, y: yPx }}
+              size={{ width: wPx, height: 'auto' }}
               onDragStop={(_e, d) => handleDragResize(el.id, d.x, d.y, wPx)}
               onResizeStop={(_e, _dir, ref, _delta, pos) => {
                 handleDragResize(el.id, pos.x, pos.y, ref.offsetWidth)
